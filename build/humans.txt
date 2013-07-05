@@ -1,0 +1,19 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Avinoam Henig -- Lead Developer
+
+# THANKS
+
+    Sophie Stein
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3, Javascript
+    Normalize.css, jQuery
+    Flickr
+    Jade, Stylus
+    LigHTTPD
+    Grunt, HTML5Boilerplate, EditorConfig

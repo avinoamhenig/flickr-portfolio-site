@@ -1,0 +1,40 @@
+!!! 5
+
+//if lt IE 7
+	html.no-js.lt-ie9.lt-ie8.lt-ie7
+//if IE 7
+	html.no-js.lt-ie9.lt-ie8
+//if IE 8
+	html.no-js.lt-ie9
+//[if gt IE 8]><!
+html.no-js
+	//<![endif]
+
+	head
+		meta(charset='utf-8')
+		title Sophie's Lens
+
+		meta(name='description', content='I love to capture the fleeting moments. The illusions, shadows, reflections and juxtapositions that exist only in my own viewpoint. Living in Portland OR with its numerous light changes within a single day, its varied mini-seasons and intertwining of nature and the urban, offers a perfect foil for my photographs.')
+		meta(name='viewport', content='width=device-width')
+
+		each url in styles
+			link(rel='stylesheet', href='#{url}')
+
+		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Sacramento',)
+
+	body
+		header
+			.logo S
+			nav
+				a(href='#') About
+				a(href='#') Contact
+			.sets
+				.arrow
+					.whiteArrow
+
+		.photos
+
+		script(src='//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js')
+
+		each url in scripts
+			script(src='#{url}')
