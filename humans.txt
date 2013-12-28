@@ -1,2 +1,13 @@
 Site created by Avinoam Henig
 avhenig@gmail.com
+
+Technologies:
+Flickr API
+Grunt JS
+Stylus
+Jade
+EditorConfig
+Git
+Node JS
+NPM
+JQuery
