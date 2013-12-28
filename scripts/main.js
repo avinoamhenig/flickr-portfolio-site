@@ -98,8 +98,8 @@
 	// Set the flickr api key
 	Flickr.apiKey = '467ae0f24f47cf186bd6a5367c68048c';
 
-	Flickr.user('16177003@N03').sets().then(function (sets) {
-	// Flickr.user('98723764@N03').sets().then(function (sets) {
+	// Flickr.user('16177003@N03').sets().then(function (sets) {
+	Flickr.user('98723764@N03').sets().then(function (sets) {
 		/*** Insert Set Thumbnails ***/
 		ready(function () {
 			$.each(sets, function (i, set) {
