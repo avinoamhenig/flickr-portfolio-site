@@ -83,6 +83,7 @@
 		$photos.find('br').remove();
 		$.each(heightMap, function (i, height) {
 			$images.eq(i)
+				.attr('src', photos[i].urlForHeight(height))
 				.attr('height', height)
 				.attr('width', (photos[i].aspect * height));
 
