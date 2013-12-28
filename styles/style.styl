@@ -1,35 +1,46 @@
 global-reset()
 
 headerColor = black
-headerTextColor = invert(headerColor)
-headerSelectionColor = #009e2f
-headerOutlineColor = #a34bff
-bodyColor = white
+headerTextColor = white
+headerSelectionColor = #ff4337
+headerOutlineColor = white
+bodyColor = black
+
+headerHeight = 90px
+headerOutlineHeight = 8px
+headerSelectionHeight = headerOutlineHeight
+
+photoPadding = 5px
+photoPaddingAdd = -2px
 
 html
 body
 	background bodyColor
 
 header
+	position fixed
+	top 0
+	width 100%
+	height headerHeight
 	background headerColor
-	border-bottom 3px solid headerOutlineColor
-	overflow hidden
+	border-bottom headerOutlineHeight solid headerOutlineColor
+	white-space nowrap
 
 	.logo
 		font-size 62px
 		font-weight 100
 		padding 0 25px
-		margin-top 20px
-		line-height 70px
 		color headerTextColor
 		font-family Sacramento, sans-serif
 		cursor default
 		display block
-		float left
+		position fixed
+		top headerHeight - 68px
 
 	nav
 		display inline-block
-		padding 37px 0 0 30px
+		float left
+		padding 0 0 0 130px
 
 		a
 			font-family sans-serif
@@ -40,8 +51,7 @@ header
 			transition opacity .3s
 			text-decoration none
 			margin-right 60px
-			margin-top -34px
-			padding 34px 5px 34px 5px
+			padding ((headerHeight - 18px) / 2) 5px
 
 			&:hover
 				opacity 1
@@ -58,11 +68,16 @@ header
 
 .sets
 	display inline
+	position absolute
+	overflow hidden
+	right -(headerHeight)
+	left 112px
+	height headerHeight + headerSelectionHeight
+	text-align right
 
 	img
-		height 90px
-		float right
-		opacity 0.6
+		height headerHeight
+		opacity 0.5
 		cursor pointer
 		transition opacity .3s
 
@@ -73,32 +88,58 @@ header
 			opacity 1
 			transition opacity .1s
 
-	// .arrow
-	// 	border 13px solid transparent
-	// 	border-bottom-color headerOutlineColor
-	// 	position absolute
-	// 	top 67px
-	// 	right 32px
-
-	// 	.whiteArrow
-	// 		position absolute
-	// 		border 9px solid transparent
-	// 		border-bottom-color bodyColor
-	// 		left -9px
-	// 		top -5px
-
 	.arrow
-		width 90px
-		height 3px
+		display inline-block
+		width headerHeight
+		height headerSelectionHeight
 		background headerSelectionColor
-		position absolute
-		top 90px
-		right 0
+		position relative
+		top 8px
 
 .photos
-	// padding 4px 3px
-	padding 0
+	padding headerHeight + headerOutlineHeight + photoPadding + photoPaddingAdd photoPadding + photoPaddingAdd photoPadding + photoPaddingAdd photoPadding + photoPaddingAdd
 	line-height 0
+	overflow hidden
+	white-space nowrap
 
 	img
-		// margin 5px
+		margin photoPadding
+		cursor pointer
+		opacity 0
+		&.loaded
+			opacity 1
+			transition opacity .3s
+
+.rightPad
+	width: photoPadding + photoPadding + photoPaddingAdd
+	height: 5000px;
+	position fixed
+	right 0
+	top headerHeight + headerOutlineHeight
+	background bodyColor
+
+.overlay
+	display none
+	position fixed
+	top 0
+	left 0
+	right 0
+	bottom 0
+	background rgba(0, 0, 0, 0.9)
+	text-align center
+	z-index 999
+	font-family sans-serif
+	font-size 18px
+	color white
+
+	.addCart
+		cursor pointer
+		padding 10px
+
+	.checkOut
+		cursor pointer
+		padding 10px
+
+.loader
+	display none
+	position absolute

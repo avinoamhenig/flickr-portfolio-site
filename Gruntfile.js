@@ -14,7 +14,8 @@ module.exports = function (grunt) {
 			return newest;
 		},
 		spec = {
-			scripts: ['console', 'flickr', 'main'],
+			scripts: ['console', 'throttle', 'hashchange', 'flickr', 'simplecart', 'main', 'google_analytics'],
+			jshint: ['console', 'flickr', 'main'],
 			styles: 'style',
 			jade: ['index']
 		};
@@ -27,10 +28,10 @@ module.exports = function (grunt) {
 			css: getNewestMTime('styles')
 		},
 
-		clean: ['build/js', 'build/css', 'build/index.html'],
+		clean: ['build/js', 'build/css', 'build/index.html', 'build/img'],
 
 		jshint: {
-			files: spec.scripts.map(function (name) {
+			files: spec.jshint.map(function (name) {
 				return 'scripts/' + name + '.js';
 			})
         },
@@ -60,6 +61,9 @@ module.exports = function (grunt) {
 						dest: 'build/js/' + getMTime('scripts/' + name + '.js') + '.' + name + '.js'
 					};
 				})
+			},
+			images: {
+				files: [{expand: true, src: ['img/**'], dest: 'build/'}]
 			}
 		},
 
@@ -132,7 +136,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jade');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	grunt.registerTask('build', ['clean', 'jshint', 'concat', 'uglify', 'stylus:build', 'jade:build']);
+	grunt.registerTask('build', ['clean', 'jshint', 'copy:images', 'concat', 'uglify', 'stylus:build', 'jade:build']);
 	grunt.registerTask('dev', ['clean', 'jshint', 'copy', 'stylus:dev', 'jade:dev', 'watch']);
 	grunt.registerTask('default', ['build']);
 };
