@@ -1,7 +1,7 @@
 {
-  "name": "SophiesLens.com",
+  "name": "SophieStein.com",
   "version": "0.0.0",
-  "description": "Sophie's Lens",
+  "description": "Sophie Stein Photography Site",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-stylus": "~0.5.1",
