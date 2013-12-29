@@ -66,8 +66,11 @@ module.exports = function (grunt) {
 					};
 				})
 			},
-			images: {
-				files: [{expand: true, src: ['img/**'], dest: 'build/'}]
+			copy: {
+				files: [{expand: true, src: ['img/**'], dest: 'build/'},
+						{src:'humans.txt', dest:'build/humans.txt'},
+						{src:'robots.txt', dest:'build/robots.txt'},
+						{src:'favicon.ico', dest:'build/favicon.ico'}]
 			}
 		},
 
@@ -103,7 +106,8 @@ module.exports = function (grunt) {
 				options: {
 					data: {
 						styles: ['/css/<%= mtime.css %>.style.min.css'],
-						scripts: ['/js/<%= mtime.js %>.scripts.min.js']
+						scripts: ['/js/<%= mtime.js %>.scripts.min.js'],
+						faviconVersion: getMTime('favicon.ico') + ''
 					}
 				}
 			},
@@ -140,7 +144,7 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jade');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	grunt.registerTask('build', ['clean', 'jshint', 'copy:images', 'concat', 'uglify', 'stylus:build', 'jade:build']);
+	grunt.registerTask('build', ['clean', 'jshint', 'copy:copy', 'concat', 'uglify', 'stylus:build', 'jade:build']);
 	grunt.registerTask('dev', ['clean', 'jshint', 'copy', 'stylus:dev', 'jade:dev', 'watch']);
 	grunt.registerTask('default', ['build']);
 };
