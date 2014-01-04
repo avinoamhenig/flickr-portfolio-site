@@ -247,6 +247,4 @@
 		$(this).fadeOut(200);
 	});
 
-
-
 })(jQuery);
