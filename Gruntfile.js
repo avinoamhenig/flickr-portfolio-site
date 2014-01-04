@@ -29,7 +29,8 @@ module.exports = function (grunt) {
 
 		mtime: {
 			js: getNewestMTime('scripts'),
-			css: getNewestMTime('styles')
+			css: getNewestMTime('styles'),
+			favicon: getMTime('favicon.ico')
 		},
 
 		clean: ['build/js', 'build/css', 'build/index.html', 'build/img'],
@@ -70,7 +71,7 @@ module.exports = function (grunt) {
 				files: [{expand: true, src: ['img/**'], dest: 'build/'},
 						{src:'humans.txt', dest:'build/humans.txt'},
 						{src:'robots.txt', dest:'build/robots.txt'},
-						{src:'favicon.ico', dest:'build/' + getMTime('favicon.ico') + '.favicon.ico'},
+						{src:'favicon.ico', dest:'build/<%= mtime.favicon %>.favicon.ico'},
 						{src:'crossdomain.xml', dest:'build/crossdomain.xml'}]
 			}
 		},
@@ -108,7 +109,7 @@ module.exports = function (grunt) {
 					data: {
 						styles: ['/css/<%= mtime.css %>.style.min.css'],
 						scripts: ['/js/<%= mtime.js %>.scripts.min.js'],
-						faviconUrl: '/' + getMTime('favicon.ico') + '.favicon.ico'
+						faviconUrl: '/<%= mtime.favicon %>.favicon.ico'
 					}
 				}
 			},
