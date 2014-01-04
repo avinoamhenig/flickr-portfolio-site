@@ -110,7 +110,6 @@
 
 		// Returns the best url for any given height.
 		this.urlForHeight = function (desiredHeight) {
-			console.log(photo);
 			var bestFit;
 
 			// Find best fit height. The rule is the smallest one that is larger than desiredHeight.

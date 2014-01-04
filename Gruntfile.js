@@ -70,7 +70,8 @@ module.exports = function (grunt) {
 				files: [{expand: true, src: ['img/**'], dest: 'build/'},
 						{src:'humans.txt', dest:'build/humans.txt'},
 						{src:'robots.txt', dest:'build/robots.txt'},
-						{src:'favicon.ico', dest:'build/favicon.ico'}]
+						{src:'favicon.ico', dest:'build/' + getMTime('favicon.ico') + '.favicon.ico'},
+						{src:'crossdomain.xml', dest:'build/crossdomain.xml'}]
 			}
 		},
 
@@ -107,7 +108,7 @@ module.exports = function (grunt) {
 					data: {
 						styles: ['/css/<%= mtime.css %>.style.min.css'],
 						scripts: ['/js/<%= mtime.js %>.scripts.min.js'],
-						faviconVersion: getMTime('favicon.ico') + ''
+						faviconUrl: '/' + getMTime('favicon.ico') + '.favicon.ico'
 					}
 				}
 			},
