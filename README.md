@@ -6,7 +6,7 @@ This is a photography portfolio site that pulls sets and photos from a Flickr us
 
 ### Setup
 
-Copy `config.json.sample` and name it `config.json`; this is the config file. Populate it with the appropriate values for your site. Any properties in the `dev` object will override the default config properties when the `--dev` build option is specified.
+Copy `config.json.sample` and name it `config.json`. This is the config file. Populate it with the appropriate values for your site. Any properties in the `dev` object will override the default config properties when the `--dev` build option is specified.
 
 The web server's document root should point to the `build/` directory within the project.
 
