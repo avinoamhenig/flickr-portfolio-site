@@ -1,7 +1,5 @@
 # Flickr Photography Portfolio Site
 
----
-
 ### Description
 
 This is a photography portfolio site that pulls sets and photos from a Flickr user using the Flickr API. **It's still in development and not ready for live use.**
