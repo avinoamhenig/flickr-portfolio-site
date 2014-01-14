@@ -18,8 +18,12 @@ module.exports = function (grunt) {
 			return newest;
 		},
 		spec = {
-			scripts: ['console', 'throttle', 'hashchange', 'flickr', 'simplecart', 'main', 'google_analytics'],
-			jshint: ['console', 'flickr', 'main'],
+			scripts: [
+				'console', 'throttle', 'hashchange', 'flickr',
+				grunt.option('dev') ? 'config.dev' : 'config',
+				'main', 'google_analytics'
+			],
+			jshint: ['console', 'flickr', 'config', 'main'],
 			styles: 'style',
 			jade: ['index']
 		};
@@ -107,6 +111,7 @@ module.exports = function (grunt) {
 				})),
 				options: {
 					data: {
+						title: grunt.option('dev') ? 'Test User' : 'Sophie Stein Photography',
 						styles: ['/css/<%= mtime.css %>.style.min.css'],
 						scripts: ['/js/<%= mtime.js %>.scripts.min.js'],
 						faviconUrl: '/<%= mtime.favicon %>.favicon.ico'

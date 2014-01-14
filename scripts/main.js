@@ -97,10 +97,9 @@
 	$(window).on('resize.layoutImages', $.throttle(250, layoutImages));
 
 	// Set the flickr api key
-	Flickr.apiKey = '467ae0f24f47cf186bd6a5367c68048c';
+	Flickr.apiKey = config.flickr.apiKey;
 
-	// Flickr.user('16177003@N03').sets().then(function (sets) {
-	Flickr.user('98723764@N03').sets().then(function (sets) {
+	Flickr.user(config.flickr.userId).sets().then(function (sets) {
 		/*** Insert Set Thumbnails ***/
 		ready(function () {
 			$.each(sets, function (i, set) {

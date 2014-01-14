@@ -6,7 +6,7 @@
  * Written by Avinoam Henig
  */
 
-;(function ($, undefined) {
+;(function ($) {
 	"use strict";
 
 	var
