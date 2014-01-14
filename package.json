@@ -1,7 +1,7 @@
 {
-  "name": "SophieStein.com",
+  "name": "Flickr Photography Portfolio",
   "version": "0.0.0",
-  "description": "Sophie Stein Photography Website",
+  "description": "This is a photography portfolio site that pulls sets and photos from a Flickr user using the Flickr API.",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-stylus": "~0.5.1",

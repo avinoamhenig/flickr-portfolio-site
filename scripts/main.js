@@ -108,7 +108,7 @@
 				$img.attr({
 					'src': set.url('q'),
 					'title': set.title,
-					'data-url': set.urlTitle
+					'data-url': set.urlTitle.replace(/\W/g, '-')
 				}).data('set', set).insertBefore('.arrow');
 			});
 		});
@@ -145,7 +145,7 @@
 			});
 
 			// Update URL
-			window.location.hash = set.urlTitle;
+			window.location.hash = set.urlTitle.replace(/\W/g, '-');
 
 			selected.removeClass('selected');
 			$img.addClass('selected');

@@ -1,0 +1,11 @@
+{
+	"title": "Flickr Photography Portfolio",
+	"flickr": {
+		"apiKey": "",
+		"userId": ""
+	},
+
+	"dev": {
+		"title": "These options override the defaults when the --dev build option is specified."
+	}
+}
