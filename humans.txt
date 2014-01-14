@@ -3,11 +3,7 @@
 
 # TEAM
 
-    Avinoam Henig - Lead Developer - avhenig@gmail.com
-
-# THANKS
-
-    Sophie Stein
+    Avinoam Henig - avhenig@gmail.com
 
 # TECHNOLOGY COLOPHON
 
