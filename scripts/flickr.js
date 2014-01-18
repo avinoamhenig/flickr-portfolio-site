@@ -109,8 +109,14 @@
 		})[0]);
 
 		// Returns the best url for any given height.
-		this.urlForHeight = function (desiredHeight) {
+		this.urlForHeight = function (desiredHeight, maxUpscale) {
 			var bestFit;
+
+			if (maxUpscale === undefined) {
+				maxUpscale = 2;
+			} else if (!maxUpscale) {
+				maxUpscale = 0;
+			}
 
 			// Find best fit height. The rule is the smallest one that is larger than desiredHeight.
 			// If none are larger than it will use the largest one.
@@ -129,8 +135,8 @@
 					if (height < desiredHeight && i !== 0) {
 
 						// If the difference is less than the difference between the desired height and the larger (previous) height,
-						// and it's at least half the desired height, then use the smaller height.
-						if ((height >= desiredHeight / 2) && (Math.abs(height - desiredHeight) < Math.abs(bestFit - desiredHeight))) {
+						// and it's close enought to the desired height, then use the smaller height.
+						if ((height * maxUpscale >= desiredHeight) && (Math.abs(height - desiredHeight) < Math.abs(bestFit - desiredHeight))) {
 							bestFit = height;
 						}
 
@@ -147,8 +153,8 @@
 		};
 
 		// Returns the best url for any given width.
-		this.urlForWidth = function (desiredWidth) {
-			return this.urlForHeight(desiredWidth / this.aspect);
+		this.urlForWidth = function (desiredWidth, maxUpscale) {
+			return this.urlForHeight(desiredWidth / this.aspect, maxUpscale);
 		};
 
 		this.heightForURL = function (url) {
