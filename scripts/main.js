@@ -21,9 +21,6 @@
 	// Stores the array of FlickrPhoto objects for the currently selected set
 	photos,
 
-	// Flags
-	overlayHidden = true,
-
 	// DOM Elements
 	$photos = $('.photos'),
 	$sets = $('.sets'),
@@ -278,19 +275,16 @@
 		layoutHandler();
 		$(window).on('resize.layoutOverlay', $.debounce(250, false, layoutHandler));
 
-		$('.overlay').fadeIn(300);
+		$('.overlay').addClass('active');
 		window.location.hash = window.location.hash.slice(1).replace(/(\/.*)?$/, '/' + photo.data.id);
-		overlayHidden = false;
 	});
 	$('.overlay img.big').on('load.showBig', function () {
 		$(this).show();
 		$('.overlay img.small').hide();
-		console.log('load');
 	});
 	$('.overlay').on('click.hideOverlay', function () {
-		overlayHidden = true;
 		$(window).off('resize.layoutOverlay');
-		$(this).fadeOut(200);
+		$(this).removeClass('active');
 		window.location.hash = window.location.hash.slice(1).replace(/\/.*/, '');
 	});
 
