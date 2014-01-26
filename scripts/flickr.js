@@ -42,7 +42,7 @@
 
 		// Set properties
 		this.title = this.data.title._content;
-		this.urlTitle = this.title.toLowerCase().replace(' ', '-');
+		this.urlTitle = this.title.toLowerCase().replace(/\W/g, '-');
 
 		// Returns the url of the primary image of the set.
 		// Size accepts either 's' (75px square) or 'q' (150px square)

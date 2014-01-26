@@ -18,7 +18,7 @@ module.exports = function (grunt) {
 			return newest;
 		},
 		spec = {
-			scripts: ['console', 'throttle', 'hashchange', 'flickr', 'gallery', 'main', 'google_analytics'],
+			scripts: ['console', 'throttle', 'hashchange', 'mousescroll', 'flickr', 'gallery', 'main', 'google_analytics'],
 			jshint: ['console', 'flickr', 'config', 'main'],
 			styles: 'style',
 			jade: ['index']

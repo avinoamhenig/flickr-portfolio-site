@@ -33,13 +33,13 @@
 							})
 							.appendTo($photos)
 							.on('load', function () {
-								// $(this).animate({opacity: 1}, 350);
 								$(this).addClass('loaded');
-								if (photo.data.id === photoId) {
-									$(this).trigger('click.showOverlay');
-								}
 							});
 					});
+
+					if (photoId) {
+						gallery.loadOverlay(photoId);
+					}
 
 					gallery.layout();
 				});

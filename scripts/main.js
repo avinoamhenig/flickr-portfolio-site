@@ -18,8 +18,7 @@
 	// DOM Elements
 	$photos = $('.photos'),
 	$sets = $('.sets'),
-	$arrow = $('.arrow'),
-	$overlay = $('.overlay');
+	$arrow = $('.arrow');
 
 	// Set the flickr api key
 	Flickr.apiKey = config.flickr.apiKey;
@@ -28,68 +27,33 @@
 		/*** Insert Set Thumbnails ***/
 		ready(function () {
 			$.each(sets, function (i, set) {
-				var $img = $('<img>');
-
-				$img.attr({
-					'src': set.url('q'),
-					'title': set.title,
-					'data-url': set.urlTitle.replace(/\W/g, '-')
-				}).data('set', set).insertBefore('.arrow');
+				$('<img>')
+					.attr({
+						'src': set.url('q'),
+						'title': set.title,
+						'data-url': set.urlTitle
+					}).data('set', set)
+					.insertBefore('.arrow');
 			});
 		});
 
-		/*** Mousescroll Sets ***/
+		/*** Mousecroll Sets ***/
 		loaded(function () {
-			var setsWidth, setsOffsetX, setsScrollWidth,
-				scrollPadding = 100;
-
-			$(window).on('resize.updateAutoScrollVars', $.debounce(250, (function () {
-				var handler = function () {
-					setsWidth = $sets.outerWidth() - $arrow.width();
-					setsScrollWidth = $sets[0].scrollWidth - $arrow.width();
-					setsOffsetX = $sets.offset().left;
-				};
-
-				handler();
-				return handler;
-			})()));
-
-			$sets.on('mousemove', $.throttle(5, function (e) {
-				$sets.scrollLeft(
-					(setsScrollWidth - setsWidth) *
-					Math.min(Math.max((e.pageX - setsOffsetX - scrollPadding) / (setsWidth - (scrollPadding * 2)), 0), 1)
-				);
-			}));
+			$sets.mousescroll();
 		});
 
 		/*** Load Set On Click ***/
 		$sets.on('click.loadGallery', 'img', function () {
-			var selected = $sets.find('img.selected'),
-				$this = $(this);
-
-			if ($this.hasClass('selected')) return;
-
-			selected.removeClass('selected');
-			$this.addClass('selected');
-
-			// Move arrow
-			$arrow.animate({
-				right: $sets[0].scrollWidth - $this.position().left - $sets.scrollLeft() - $arrow.width()
-			}, !selected.length ? 0 : 200);
-
-			// Update URL
-			window.location.hash = $this.data('set').urlTitle.replace(/\W/g, '-');
+			window.location.hash = $(this).data('set').urlTitle;
 		});
 
 		/*** Initial Navigation **/
 		loaded(function () {
-			var $set = $sets.find('img[data-url="' + window.location.hash.slice(1).match(/^([^\/]*)(\/(.*))?$/)[1] + '"]');
-			if (!$set.length) {
-				$set = $sets.find('img').first().trigger('click.loadGallery');
+			if (!window.location.hash){
+				window.location.hash = $sets.find('img').eq(0).data('set').urlTitle;
+			} else {
+				$(window).hashchange();
 			}
-
-			$(window).hashchange();
-			$set.trigger('click.loadGallery');
 		});
 	});
 
@@ -99,11 +63,27 @@
 			set = match[1],
 			photo = match[3];
 
-		if (set && set !== gallery.loadedSet) {
-			gallery.load(set);
-		}
+		if (set !== gallery.loadedSet) {
+			// Highlight thumbnail
+			var $selected = $sets.find('img.selected'),
+				$set = $sets.find('[data-url="' + set + '"]');
 
-		if (photo) {
+			if (!$set.length) {
+				$set = $sets.find('img').eq(0);
+				window.location.hash = set = $set.data('set').urlTitle;
+			}
+
+			$selected.removeClass('selected');
+			$set.addClass('selected');
+
+			// Move arrow
+			$arrow.animate({
+				right: $sets[0].scrollWidth - $set.position().left - $sets.scrollLeft() - $arrow.width()
+			}, !$selected.length ? 0 : 200);
+
+			// Load gallery
+			gallery.load(set, photo);
+		} else if (photo) {
 			gallery.loadOverlay(photo);
 		} else {
 			gallery.hideOverlay();
