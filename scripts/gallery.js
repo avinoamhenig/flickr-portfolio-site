@@ -115,8 +115,12 @@
 
 		/*** Large Image Overlay ***/
 		loadOverlay: function (photoId) {
-			var $this = $photos.find('img[data-url="' + photoId + '"]'),
-				photo = $this.data('photo'),
+			var $this = $photos.find('img[data-url="' + photoId + '"]');
+			if (!$this.length) {
+				return;
+			}
+
+			var photo = $this.data('photo'),
 				padding = 0,
 				layoutHandler = function () {
 					var windowWidth = $(window).width(),
