@@ -15,86 +15,11 @@
 		return deferred.promise().then;
 	})(),
 
-	// Maximum height for each row of photos
-	maxHeight = 320,
-
-	// Stores the array of FlickrPhoto objects for the currently selected set
-	photos,
-
 	// DOM Elements
 	$photos = $('.photos'),
 	$sets = $('.sets'),
 	$arrow = $('.arrow'),
-
-	// Adjusts the sizes of the photos and inserts breaks to lay them out nicely
-	layoutImages = function (mHeight) {
-		if (!photos) return;
-		if (typeof mHeight !== 'number') mHeight = maxHeight;
-
-		var windowWidth = $(window).width(),
-			$images = $photos.find('img'),
-			eolIndexes = [],
-			heightMap = (function () {
-				var map = [],
-					layoutRow = function (startIndex) {
-						var i = startIndex, j,
-							rowWidth = 6;
-
-						do {
-							if (i === photos.length) break;
-
-							rowWidth += (mHeight * photos[i].aspect) + 10;
-							i++;
-						} while (rowWidth < windowWidth);
-
-						if (rowWidth < windowWidth) {
-							for (j = startIndex; j < i; j++)
-								map[j] = mHeight;
-						} else {
-							for (j = startIndex; j < i; j++)
-								map[j] = (mHeight / rowWidth) * windowWidth;
-						}
-
-						if (i === photos.length) return;
-
-						eolIndexes.push(i - 1);
-						layoutRow(i);
-					};
-
-				layoutRow(0);
-				return map;
-			})();
-
-		if ((!eolIndexes.length || eolIndexes.length === photos.length - 1) && mHeight == maxHeight) {
-			var rowAspect = 0;
-			$.each(photos, function (i, photo) {
-				rowAspect += photo.aspect;
-			});
-
-
-			return layoutImages(
-				Math.min(
-					$(window).height() - 114,
-					Math.max(
-						($(window).height() - 114) / Math.max(1, photos.length - 0.25),
-						$(window).width() / rowAspect)));
-		}
-
-		$photos.find('br').remove();
-		$.each(heightMap, function (i, height) {
-			$images.eq(i)
-				.attr('src', photos[i].urlForHeight(height))
-				.attr('height', height)
-				.attr('width', (photos[i].aspect * height));
-
-			if (eolIndexes.indexOf(i) !== -1) {
-				$('<br>').insertAfter($images.eq(i));
-			}
-		});
-	};
-
-	// Re-layout images on window resize
-	$(window).on('resize.layoutImages', $.throttle(250, layoutImages));
+	$overlay = $('.overlay');
 
 	// Set the flickr api key
 	Flickr.apiKey = config.flickr.apiKey;
@@ -111,62 +36,6 @@
 					'data-url': set.urlTitle.replace(/\W/g, '-')
 				}).data('set', set).insertBefore('.arrow');
 			});
-		});
-
-		/*** Load Set ***/
-		$sets.on('click.loadGallery', 'img', function () {
-			var $img = $(this),
-				set = $img.data('set'),
-				selected = $sets.find('img.selected'),
-				promise,
-				photoIdMatch = window.location.hash.slice(1).match(/\/(.+)$/), photoId = false;
-
-			if (set.urlTitle.replace(/\W/g, '-') === window.location.hash.slice(1).match(/^[^\/]+/)[0] && photoIdMatch) {
-				photoId = photoIdMatch[1];
-			}
-
-			if ($img.hasClass('selected')) return;
-
-			// Get photos and insert them
-			promise = set.photos();
-			$photos.fadeOut(200, function() {
-				promise.then(function (res) {
-					photos = res;
-
-					$photos.html('').show();
-					$.each(photos, function (i, photo) {
-						$('<img>')
-							.data('photo', photo)
-							.attr({
-								'src': photo.urlForHeight(maxHeight),
-								'data-url': photo.data.id
-							})
-							.appendTo($photos)
-							.on('load', function () {
-								// $(this).animate({opacity: 1}, 350);
-								$(this).addClass('loaded');
-								if (photo.data.id === photoId) {
-									$(this).trigger('click.showOverlay');
-								}
-							});
-					});
-
-					layoutImages();
-				});
-			});
-
-			// Update URL
-			if (!photoId) {
-				window.location.hash = set.urlTitle.replace(/\W/g, '-');
-			}
-
-			selected.removeClass('selected');
-			$img.addClass('selected');
-
-			// Move arrow
-			$arrow.animate({
-				right: $sets[0].scrollWidth - $img.position().left - $sets.scrollLeft() - $arrow.width()
-			}, !selected.length ? 0 : 200);
 		});
 
 		/*** Mousescroll Sets ***/
@@ -192,32 +61,53 @@
 				);
 			}));
 		});
+
+		/*** Load Set On Click ***/
+		$sets.on('click.loadGallery', 'img', function () {
+			var selected = $sets.find('img.selected'),
+				$this = $(this);
+
+			if ($this.hasClass('selected')) return;
+
+			selected.removeClass('selected');
+			$this.addClass('selected');
+
+			// Move arrow
+			$arrow.animate({
+				right: $sets[0].scrollWidth - $this.position().left - $sets.scrollLeft() - $arrow.width()
+			}, !selected.length ? 0 : 200);
+
+			// Update URL
+			window.location.hash = $this.data('set').urlTitle.replace(/\W/g, '-');
+		});
+
+		/*** Initial Navigation **/
+		loaded(function () {
+			var $set = $sets.find('img[data-url="' + window.location.hash.slice(1).match(/^([^\/]*)(\/(.*))?$/)[1] + '"]');
+			if (!$set.length) {
+				$set = $sets.find('img').first().trigger('click.loadGallery');
+			}
+
+			$(window).hashchange();
+			$set.trigger('click.loadGallery');
+		});
 	});
 
-	/*** Change Set/Photo on Hashchange ***/
+	/*** Hashchange Navigation ***/
 	$(window).hashchange(function () {
 		var match = window.location.hash.slice(1).match(/^([^\/]*)(\/(.*))?$/),
 			set = match[1],
 			photo = match[3];
 
-		if (set) {
-			$sets.find('img[data-url="' + set + '"]').trigger('click.loadGallery');
+		if (set && set !== gallery.loadedSet) {
+			gallery.load(set);
 		}
 
 		if (photo) {
-			$photos.find('img[data-url="' + photo + '"]').trigger('click.showOverlay');
+			gallery.loadOverlay(photo);
 		} else {
-			$('.overlay').trigger('click.hideOverlay');
+			gallery.hideOverlay();
 		}
-	});
-
-	/*** Load Initial Set ***/
-	loaded(function () {
-		var $currentImg = $sets.find('img[data-url="' + window.location.hash.slice(1).match(/^[^\/]+/)[0] + '"]'),
-			$firstSetImg = $sets.find('img').eq(0);
-
-		if ($currentImg.length) $currentImg.trigger('click.loadGallery');
-		else $firstSetImg.trigger('click.loadGallery');
 	});
 
 	/*** Ajax Loader ***/
@@ -241,51 +131,15 @@
 		});
 	});
 
-	/*** Large Image Overlay ***/
 	$photos.on('click.showOverlay', 'img', function () {
-		var $this = $(this),
-			photo = $this.data('photo'),
-			padding = 0,
-			layoutHandler = function () {
-				var windowWidth = $(window).width(),
-					windowHeight = $(window).height(),
-					windowAspect = windowWidth / windowHeight,
-					width = windowAspect < photo.aspect ? windowWidth - padding : (windowHeight * photo.aspect) - padding,
-					height = width / photo.aspect,
-					url = photo.urlForWidth($(window).width() - padding, 1.5),
-					margin = (windowHeight / 2) - (height / 2),
-					$bigImg = $('.overlay img.big'),
-					$smallImg = $('.overlay img.small');
-
-				if (url !== $bigImg.attr('src')) {
-					$bigImg.hide();
-					$smallImg
-						.attr('src', $this.attr('src'))
-						.width(width)
-						.css('margin-top', margin)
-						.show();
-				}
-
-				$bigImg
-					.attr('src', url)
-					.width(width)
-					.css('margin-top', margin);
-			};
-
-		layoutHandler();
-		$(window).on('resize.layoutOverlay', $.debounce(250, false, layoutHandler));
-
-		$('.overlay').addClass('active');
-		window.location.hash = window.location.hash.slice(1).replace(/(\/.*)?$/, '/' + photo.data.id);
+		window.location.hash = window.location.hash.slice(1).replace(/(\/.*)?$/, '/' + $(this).data('url'));
 	});
 	$('.overlay img.big').on('load.showBig', function () {
 		$(this).show();
 		$('.overlay img.small').hide();
 	});
 	$('.overlay').on('click.hideOverlay', function () {
-		$(window).off('resize.layoutOverlay');
-		$(this).removeClass('active');
-		window.location.hash = window.location.hash.slice(1).replace(/\/.*/, '');
+		window.location.hash = window.location.hash.slice(1).replace(/\/.*$/, '');
 	});
 
 })(jQuery);
