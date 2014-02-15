@@ -4,6 +4,13 @@
 		"apiKey": "",
 		"userId": ""
 	},
+	"paypal": {
+		"user": "test@example.com"
+	},
+	"sizeOptions": {
+		"3x5": "10",
+		"10x15": "20"
+	},
 
 	"dev": {
 		"title": "These options override the defaults when the --dev build option is specified."

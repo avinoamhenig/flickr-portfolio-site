@@ -27,8 +27,28 @@ html.no-js
 		img.loader(src='img/load.gif')
 
 		.overlay
-			img.small
-			img.big
+			.imgContainer
+				img.small
+				img.big
+
+				div.imgOptions
+					form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_blank")
+						input(type="hidden", name="business", value="#{config.paypal.user}")
+						input(type="hidden", name="cmd", value="_xclick")
+
+						input(type="hidden", name="item_name", value="")
+						input(type="hidden", name="amount", value="")
+						input(type="hidden", name="currency_code", value="USD")
+						input(type="submit", name="submit", target='_blank', style='display:none;')
+
+						input(type="hidden", name="on0", value="Photo ID")
+						input(type="hidden", name="os0", value="")
+
+						each price, size in config.sizeOptions
+							span.sizeOption(data-price='#{price}') #{size}
+
+						img.cartImg(src="img/cart.png")
+						span.price $20
 
 		.content
 			header

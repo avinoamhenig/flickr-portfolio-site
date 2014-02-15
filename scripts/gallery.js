@@ -1,6 +1,8 @@
 ;(function ($) {
 	var $photos = $('.photos'),
 		$sets = $('.sets'),
+		$overlay = $('.overlay'),
+		$imgOptions = $('.imgOptions'),
 		photos; // Stores the array of FlickrPhoto objects for the currently selected set
 
 	window.gallery = {
@@ -115,7 +117,8 @@
 
 		/*** Large Image Overlay ***/
 		loadOverlay: function (photoId) {
-			var $this = $photos.find('img[data-url="' + photoId + '"]');
+			var $this = $photos.find('img[data-url="' + photoId + '"]'),
+				mouseMoveTimeout;
 			if (!$this.length) {
 				return;
 			}
@@ -130,38 +133,48 @@
 						height = width / photo.aspect,
 						url = photo.urlForWidth($(window).width() - padding, 1.5),
 						margin = (windowHeight / 2) - (height / 2),
-						$bigImg = $('.overlay img.big'),
-						$smallImg = $('.overlay img.small');
+						$bigImg = $overlay.find('img.big'),
+						$smallImg = $overlay.find('img.small');
 
 					if (url !== $bigImg.attr('src')) {
 						$bigImg.hide();
 						$smallImg
 							.attr('src', $this.attr('src'))
-							.width(width)
 							.css('margin-top', margin)
 							.show();
 					}
 
 					$bigImg
 						.attr('src', url)
-						.width(width)
 						.css('margin-top', margin);
+
+					$overlay.find('.imgContainer').width(width);
 				};
 
 			layoutHandler();
 			$(window).on('resize.layoutOverlay', $.debounce(250, false, layoutHandler));
 
-			$('.overlay').addClass('active');
+			$overlay.addClass('active');
+
+			$(window).on('mousemove.showImgOptions', $.debounce(250, true, function () {
+				$imgOptions.addClass('show');
+			}));
+			$(window).on('mousemove.showImgOptions', $.debounce(3000, false, function () {
+				$imgOptions.removeClass('show');
+			}));
 
 			window.setTimeout(function () {
 				$('body').css('overflow', 'hidden');
 			}, 700);
+
+			$imgOptions.find('input[name=os0]').val(photo.data.id);
 		},
 
 		hideOverlay: function() {
 			$('body').css('overflow', 'auto');
 			$(window).off('resize.layoutOverlay');
-			$('.overlay').removeClass('active');
+			$(window).off('mousemove.showImgOptions');
+			$overlay.removeClass('active');
 		}
 	};
 
@@ -169,4 +182,24 @@
 	$(window).on('resize.layoutGallery', $.throttle(250, function () {
 		gallery.layout(photos);
 	}));
+
+	$imgOptions.on('click', function (e) {
+		e.stopPropagation();
+	});
+
+	$imgOptions.find('.sizeOption').on('mouseover', function () {
+		$imgOptions.find('.cartImg').hide();
+		$imgOptions.find('.price').html('$' + $(this).attr('data-price')).css('display', 'inline-block');
+	}).on('mouseout', function () {
+		$imgOptions.find('.price').hide();
+		$imgOptions.find('.cartImg').show();
+	}).on('click', function () {
+		var $this = $(this),
+			size = $this.html(),
+			price = $this.attr('data-price');
+
+		$imgOptions.find('input[name=item_name]').val('Print - ' + size);
+		$imgOptions.find('input[name=amount]').val(price);
+		$imgOptions.find('input[name=submit]').trigger('click');
+	});
 })(jQuery);
