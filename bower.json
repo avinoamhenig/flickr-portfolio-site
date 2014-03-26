@@ -1,0 +1,7 @@
+{
+  "name": "flickr-portfolio-site",
+  "dependencies": {
+    "jquery-throttle-debounce": "*",
+    "jquery-hashchange": "*"
+  }
+}

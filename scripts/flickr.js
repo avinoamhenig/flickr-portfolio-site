@@ -135,7 +135,7 @@
 					if (height < desiredHeight && i !== 0) {
 
 						// If the difference is less than the difference between the desired height and the larger (previous) height,
-						// and it's close enought to the desired height, then use the smaller height.
+						// and it's close enough to the desired height, then use the smaller height.
 						if ((height * maxUpscale >= desiredHeight) && (Math.abs(height - desiredHeight) < Math.abs(bestFit - desiredHeight))) {
 							bestFit = height;
 						}

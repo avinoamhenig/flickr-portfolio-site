@@ -1,15 +1,18 @@
 {
-	"title": "Flickr Photography Portfolio",
-	"flickr": {
-		"apiKey": "",
-		"userId": ""
-	},
-	"paypal": {
-		"user": "test@example.com"
-	},
-	"sizeOptions": {
-		"3x5": "10",
-		"10x15": "20"
+	"default": {
+		"title": "Flickr Photography Portfolio",
+		"desc": "Flickr Photography Portfolio Site",
+		"flickr": {
+			"apiKey": "",
+			"userId": ""
+		},
+		"paypal": {
+			"user": "test@example.com"
+		},
+		"sizeOptions": {
+			"3x5": "10",
+			"10x15": "20"
+		}
 	},
 
 	"dev": {

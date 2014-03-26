@@ -6,53 +6,90 @@ module.exports = function (grunt) {
 
 	var fs = require('fs'),
 		extend = require('node.extend'),
-		getMTime = function (path) {
+		getModifiedTime = function (path) {
 			return (new Date(fs.statSync(path).mtime)).getTime();
 		},
-		getNewestMTime = function (dir) {
-			var newest = 0;
-			fs.readdirSync(dir).forEach(function (file) {
-				var mtime = getMTime(dir + '/' + file);
-				if (mtime > newest) newest = mtime;
-			});
-			return newest;
+		filename = function (path) {
+			return path.match(/\/([^\/]+)$/)[1];
 		},
-		spec = {
-			scripts: ['console', 'throttle', 'hashchange', 'mousescroll', 'flickr', 'gallery', 'main', 'google_analytics'],
-			jshint: ['console', 'flickr', 'config', 'main'],
-			styles: 'style',
-			jade: ['index']
-		},
-		config = grunt.file.readJSON('config.json');
 
-	if (grunt.option('dev')) {
-		extend(true, config, config.dev);
-	}
-	delete config.dev;
+		config = (function () {
+			var config = grunt.file.readJSON('config.json'),
+				option = grunt.option('config');
+
+			return option ? extend(true, config.default, config[option]).default : config.default;
+		})(),
+
+		spec = (function () {
+			var jshint = function (path) {
+					toJsHint.push(path);
+					return path;
+				}, toJsHint = [],
+
+				scripts = 'scripts/',
+				bower = 'bower_components/',
+				styles = 'styles/',
+				views = 'views/';
+
+			return {
+				files: {
+					js: [
+						bower + 'jquery-throttle-debounce/jquery.ba-throttle-debounce',
+						bower + 'jquery-hashchange/jquery.ba-hashchange',
+						jshint(scripts + 'mousescroll'),
+						jshint(scripts + 'flickr'),
+						jshint(scripts + 'gallery'),
+						jshint(scripts + 'main'),
+						scripts + 'google_analytics'
+					],
+					styl: [
+						styles + 'style'
+					],
+					jade: [
+						views + 'index'
+					]
+				},
+
+				jshint: toJsHint
+			};
+		})(),
+
+		modifiedTimes = Object.keys(spec.files).reduce(function (obj, key) {
+			obj[key] = spec.files[key].reduce(function (obj, path) {
+				obj[path] = getModifiedTime(path + '.' + key);
+				return obj;
+			}, {});
+
+			return obj;
+		}, {});
+
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 
-		mtime: {
-			js: getNewestMTime('scripts'),
-			css: getNewestMTime('styles'),
-			favicon: getMTime('favicon.ico')
-		},
+		reducedModifiedTimes: Object.keys(modifiedTimes).reduce(function (obj, key) {
+			obj[key] = Math.max.apply(Math, Object.keys(modifiedTimes[key]).map(function (path) {
+				return modifiedTimes[key][path];
+			}));
 
-		clean: ['build/js', 'build/css', 'build/index.html', 'build/img'],
+			return obj;
+		}, {}),
+
+
+		clean: ['build'],
 
 		jshint: {
 			files: spec.jshint.map(function (name) {
-				return 'scripts/' + name + '.js';
+				return name + '.js';
 			})
-        },
+		},
 
 		concat: {
 			scripts: {
-				src: spec.scripts.map(function (name) {
-					return 'scripts/' + name + '.js';
+				src: spec.files.js.map(function (name) {
+					return name + '.js';
 				}),
-				dest: 'build/js/<%= mtime.js %>.scripts.min.js'
+				dest: 'build/scripts/<%= reducedModifiedTimes.js %>.scripts.min.js'
 			}
 		},
 
@@ -66,10 +103,10 @@ module.exports = function (grunt) {
 
 		copy: {
 			scripts: {
-				files: spec.scripts.map(function (name) {
+				files: spec.files.js.map(function (name) {
 					return {
-						src: 'scripts/' + name + '.js',
-						dest: 'build/js/' + getMTime('scripts/' + name + '.js') + '.' + name + '.js'
+						src: name + '.js',
+						dest: 'build/scripts/' + modifiedTimes.js[name] + '.' + filename(name) + '.js'
 					};
 				})
 			},
@@ -77,8 +114,7 @@ module.exports = function (grunt) {
 				files: [{expand: true, src: ['img/**'], dest: 'build/'},
 						{src:'humans.txt', dest:'build/humans.txt'},
 						{src:'robots.txt', dest:'build/robots.txt'},
-						{src:'favicon.ico', dest:'build/<%= mtime.favicon %>.favicon.ico'},
-						{src:'crossdomain.xml', dest:'build/crossdomain.xml'}]
+						{src:'favicon.ico', dest:'build/' + getModifiedTime('favicon.ico') + '.favicon.ico'}]
 			}
 		},
 
@@ -86,55 +122,49 @@ module.exports = function (grunt) {
 			build: {
 				options: {
 					import: ['nib'],
-					paths: ['styles']
-				},
-				files: {
-					'build/css/<%= mtime.css %>.style.min.css': 'styles/' + spec.styles + '.styl'
-				}
-			},
-			dev: {
-				options: {
-					import: ['nib'],
 					paths: ['styles'],
 					compress: true
 				},
-				files: {
-					'build/css/<%= mtime.css %>.style.css': 'styles/' + spec.styles + '.styl'
-				}
+				files: spec.files.styl.reduce(function (obj, name) {
+					obj['build/styles/' + modifiedTimes.styl[name] + '.' + filename(name) + '.css'] = name + '.styl';
+					return obj;
+				}, {})
 			}
 		},
 
 		jade: {
 			build: {
-				files: extend.apply({}, spec.jade.map(function (name) {
+				files: extend.apply({}, spec.files.jade.map(function (name) {
 					var r = {};
-					r['build/' + name + '.html'] = 'views/' + name + '.jade';
+					r['build/' + filename(name) + '.html'] = name + '.jade';
 					return r;
 				})),
 				options: {
 					data: {
 						config: config,
-						styles: ['/css/<%= mtime.css %>.style.min.css'],
-						scripts: ['/js/<%= mtime.js %>.scripts.min.js'],
-						faviconUrl: '/<%= mtime.favicon %>.favicon.ico'
+						styles: ['/styles/<%= reducedModifiedTimes.styl %>.style.min.css'],
+						scripts: ['/scripts/<%= reducedModifiedTimes.js %>.scripts.min.js'],
+						faviconUrl: '/' + getModifiedTime('favicon.ico') + 'favicon.ico'
 					}
 				}
 			},
 			dev: {
-				files: extend.apply({}, spec.jade.map(function (name) {
+				files: extend.apply({}, spec.files.jade.map(function (name) {
 					var r = {};
-					r['build/' + name + '.html'] = 'views/' + name + '.jade';
+					r['build/' + filename(name) + '.html'] = name + '.jade';
 					return r;
 				})),
 				options: {
 					pretty: true,
 					data: {
 						config: config,
-						styles: ['/css/<%= mtime.css %>.style.css'],
-						scripts: spec.scripts.map(function (name) {
-							return '/js/' + getMTime('scripts/' + name + '.js') + '.' + name + '.js';
+						styles: spec.files.styl.map(function (name) {
+							return '/styles/' + modifiedTimes.styl[name] + '.' + filename(name) + '.css';
 						}),
-						faviconUrl: '/<%= mtime.favicon %>.favicon.ico'
+						scripts: spec.files.js.map(function (name) {
+							return '/scripts/' + modifiedTimes.js[name] + '.' + filename(name) + '.js';
+						}),
+						faviconUrl: '/' + getModifiedTime('favicon.ico') + 'favicon.ico'
 					}
 				}
 			}
@@ -142,7 +172,7 @@ module.exports = function (grunt) {
 
 		watch: {
 			files: ['scripts/*', 'styles/*', 'views/*'],
-            tasks: ['clean', 'jshint', 'copy', 'stylus:dev', 'jade:dev']
+			tasks: ['clean', 'jshint', 'copy', 'stylus:dev', 'jade:dev']
 		}
 	});
 
@@ -155,7 +185,8 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-contrib-jade');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 
-	grunt.registerTask('build', ['clean', 'jshint', 'copy:copy', 'concat', 'uglify', 'stylus:build', 'jade:build']);
-	grunt.registerTask('dev', ['clean', 'jshint', 'copy', 'stylus:dev', 'jade:dev', 'watch']);
+	grunt.registerTask('build', ['clean', 'jshint', 'copy:copy', 'concat', 'uglify', 'stylus', 'jade:build']);
+	grunt.registerTask('dev', ['clean', 'jshint', 'copy', 'stylus', 'jade:dev', 'watch']);
 	grunt.registerTask('default', ['build']);
+
 };
