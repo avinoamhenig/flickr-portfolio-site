@@ -2,28 +2,24 @@
 
 ### Description
 
-This is a photography portfolio site that pulls sets and photos from a Flickr user using the Flickr API. **It's still in development and not ready for production use.**
+This is a photography portfolio site that pulls sets and photos from Flickr. **It's still in development and not ready for production use.**
 
 ### Setup
 
-Copy `config.json.sample` and name it `config.json`. This is the config file. Populate it with the appropriate values for your site. Any properties in the `dev` object will override the default config properties when the `--dev` build option is specified.
+Copy `config.json.sample` and name it `config.json`. This is the config file. Populate it with the appropriate values for your site. The `default` configuration object is used by default. You can create your own custom configuration objects (see sample `dev` object for an example) that will override the default options. You can build using different configuration objects with the `--config=configObjectName` option.
 
 The web server's document root should point to the `build/` directory within the project.
 
 ### Build
 
-The build script compiles and processes all the files and puts them in the `build/` directory. It uses Node JS and Grunt. Once you have node installed run `npm install -g grunt-cli` to install the grunt command line interface.
+The build script compiles and processes all the files and places the result in the `build` directory. It relies on Node JS and Grunt.
 
-From the root directory of the project run `grunt build` to build the site.
+Once you have Node and the Grunt CLI installed you can run `grunt build` from the root directory of the project.
 
 Run `grunt dev` to build a non-minified or concatanated version. It also sets up a watch task to automatically build whenever a file is modified.
 
-The `--dev` option builds using the dev config options.
+The optional `--config` option builds using custom configuration objects to override the default options.
 
-##### Cache-busting
+##### Flickr API Angular Javascript Wrapper
 
-The build script prepends a string to the beginning of css and javascript files that corresponds to the date modified. This ensures that new versions of the file are not loaded from the browser's cache. This also enables you to set very long expires headers for those files in order to improve load time.
-
-##### Flickr API Javascript Wrapper
-
-The `scripts/flickr.js` file could be used independantly as a javascript helper/wrapper for the the Flickr API.
+The `scripts/flickr.js` file could be used independantly as an angular module for using the Flickr API.
