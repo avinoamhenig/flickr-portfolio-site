@@ -11,61 +11,43 @@ html.no-js
 	//<![endif]
 
 	head
-		meta(charset='utf-8')
+		meta(charset="utf-8")
 		title #{config.title}
 
-		meta(name='description', content='#{config.desc}')
-		meta(name='viewport', content='width=device-width')
+		meta(name="description", content="#{config.desc}")
+		meta(name="viewport", content="width=device-width")
 
 		each url in styles
-			link(rel='stylesheet', href='#{url}')
+			link(rel="stylesheet", href="#{url}")
 
-		link(rel='stylesheet', href='http://fonts.googleapis.com/css?family=Sacramento')
-		link(rel='shortcut icon', href='#{faviconUrl}')
+		link(rel="stylesheet", href="http://fonts.googleapis.com/css?family=Sacramento")
+		link(rel="shortcut icon", href="#{faviconUrl}")
 
-	body
-		img.loader(src='img/load.gif')
+	body(ng-app="flickrPortfolioSite", ng-controller="SiteController")
+		header
+			.logo S
+			nav
+				a(href="#") About
 
-		.overlay
-			.imgContainer
-				img.small
-				img.big
+			.sets(ah-sets, sets="sets", selected-set="selectedSet")
 
-				div.imgOptions
-					form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_blank")
-						input(type="hidden", name="business", value="#{config.paypal.user}")
-						input(type="hidden", name="cmd", value="_xclick")
+		div(ng-view)
 
-						input(type="hidden", name="item_name", value="")
-						input(type="hidden", name="amount", value="")
-						input(type="hidden", name="currency_code", value="USD")
-						input(type="submit", name="submit", target='_blank', style='display:none;')
+		script(type="text/ng-template", id="directives/ah-sets")
+			include directives/ah-sets
+		script(type="text/ng-template", id="directives/ah-photo")
+			include directives/ah-photo
+		script(type="text/ng-template", id="directives/ah-image-options")
+			include directives/ah-image-options
+		script(type="text/ng-template", id="partials/gallery")
+			include partials/gallery
 
-						input(type="hidden", name="on0", value="Photo ID")
-						input(type="hidden", name="os0", value="")
-
-						each price, size in config.sizeOptions
-							span.sizeOption(data-price='#{price}') #{size}
-
-						img.cartImg(src="img/cart.png")
-						span.price $20
-
-		.content
-			header
-				.logo S
-				nav
-					//- a(href='#') About
-					//- a(href='#') Contact
-				.sets
-					.arrow
-
-			.rightPad
-			.photos
-
-		script(src='//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js')
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js")
+		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-route.js")
 
 		script.
 			window.config = !{JSON.stringify(config)};
 
 		each url in scripts
-			script(src='#{url}')
+			script(src="#{url}")

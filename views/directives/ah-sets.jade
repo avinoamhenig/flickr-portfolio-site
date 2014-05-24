@@ -1,0 +1,8 @@
+a(
+	ng-repeat="set in sets",
+	title="{{set.title}}",
+	href="#/{{set.urlTitle}}"
+	data-urlTitle="{{set.urlTitle}}"
+)
+	img(src="{{set.url('q')}}", ng-class="{selected: selectedSet === set.urlTitle}")
+.arrow

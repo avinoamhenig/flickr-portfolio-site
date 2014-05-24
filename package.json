@@ -1,5 +1,5 @@
 {
-  "name": "Flickr Photography Portfolio",
+  "name": "flickr_portfolio",
   "version": "0.0.0",
   "description": "This is a photography portfolio site that pulls sets and photos from a Flickr user using the Flickr API.",
   "devDependencies": {

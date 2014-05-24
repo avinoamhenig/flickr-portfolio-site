@@ -17,37 +17,33 @@ module.exports = function (grunt) {
 			var config = grunt.file.readJSON('config.json'),
 				option = grunt.option('config');
 
-			return option ? extend(true, config.default, config[option]).default : config.default;
+			return option ? extend(true, config.default, config[option]) : config.default;
 		})(),
 
 		spec = (function () {
 			var jshint = function (path) {
 					toJsHint.push(path);
 					return path;
-				}, toJsHint = [],
-
-				scripts = 'scripts/',
-				bower = 'bower_components/',
-				styles = 'styles/',
-				views = 'views/';
+				}, toJsHint = [];
 
 			return {
 				files: {
 					js: [
-						bower + 'jquery-throttle-debounce/jquery.ba-throttle-debounce',
-						bower + 'jquery-hashchange/jquery.ba-hashchange',
-						jshint(scripts + 'mousescroll'),
-						jshint(scripts + 'flickr'),
-						jshint(scripts + 'gallery'),
-						jshint(scripts + 'main'),
-						scripts + 'google_analytics'
+						'bower_components/jquery-throttle-debounce/jquery.ba-throttle-debounce',
+
+						jshint('scripts/whenpageis'),
+						jshint('scripts/ahPromises'),
+						jshint('scripts/flickr'),
+						jshint('scripts/ah-sets'),
+						jshint('scripts/ah-photo'),
+						jshint('scripts/ah-image-options'),
+						jshint('scripts/flickrPortfolioSite'),
+						jshint('scripts/galleryController'),
+
+						'scripts/google_analytics'
 					],
-					styl: [
-						styles + 'style'
-					],
-					jade: [
-						views + 'index'
-					]
+					styl: ['styles/style'],
+					jade: ['views/index']
 				},
 
 				jshint: toJsHint
@@ -62,7 +58,6 @@ module.exports = function (grunt) {
 
 			return obj;
 		}, {});
-
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
@@ -144,7 +139,7 @@ module.exports = function (grunt) {
 						config: config,
 						styles: ['/styles/<%= reducedModifiedTimes.styl %>.style.min.css'],
 						scripts: ['/scripts/<%= reducedModifiedTimes.js %>.scripts.min.js'],
-						faviconUrl: '/' + getModifiedTime('favicon.ico') + 'favicon.ico'
+						faviconUrl: '/' + getModifiedTime('favicon.ico') + '.favicon.ico'
 					}
 				}
 			},
@@ -164,15 +159,15 @@ module.exports = function (grunt) {
 						scripts: spec.files.js.map(function (name) {
 							return '/scripts/' + modifiedTimes.js[name] + '.' + filename(name) + '.js';
 						}),
-						faviconUrl: '/' + getModifiedTime('favicon.ico') + 'favicon.ico'
+						faviconUrl: '/' + getModifiedTime('favicon.ico') + '.favicon.ico'
 					}
 				}
 			}
 		},
 
 		watch: {
-			files: ['scripts/*', 'styles/*', 'views/*'],
-			tasks: ['clean', 'jshint', 'copy', 'stylus:dev', 'jade:dev']
+			files: ['scripts/**', 'styles/**', 'views/**'],
+			tasks: ['clean', 'jshint', 'copy', 'stylus', 'jade:dev']
 		}
 	});
 
