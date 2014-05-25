@@ -5,7 +5,7 @@ angular.module('ahImageOptions', [])
 		restrict: 'AE',
 		templateUrl: 'directives/ah-image-options',
 		scope: {
-			photoId: '@'
+			photo: '='
 		},
 		link: function (scope, element) {
 			element.on('click', function (e) {
@@ -13,18 +13,17 @@ angular.module('ahImageOptions', [])
 			});
 
 			element.find('.sizeOption').on('mouseover', function () {
-				element.find('.cartImg').hide();
-				element.find('.price').html('$' + $(this).attr('data-price')).css('display', 'inline-block');
+				var $this = $(this);
+				scope.$apply(function () {
+					scope.showPrice = true;
+					scope.price = $this.attr('data-price');
+					scope.size = $this.html();
+				});
 			}).on('mouseout', function () {
-				element.find('.price').hide();
-				element.find('.cartImg').show();
+				scope.$apply(function () {
+					scope.showPrice = false;
+				});
 			}).on('click', function () {
-				var $this = $(this),
-					size = $this.html(),
-					price = $this.attr('data-price');
-
-				element.find('input[name=item_name]').val('Print - ' + size);
-				element.find('input[name=amount]').val(price);
 				element.find('input[name=submit]').trigger('click');
 			});
 		}

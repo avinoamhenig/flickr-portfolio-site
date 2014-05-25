@@ -69,6 +69,7 @@ angular.module('flickrPortfolioSite')
 					return false;
 				}
 			});
+
 			return r;
 		},
 
@@ -91,15 +92,14 @@ angular.module('flickrPortfolioSite')
 				windowHeight = $($window).height(),
 				windowAspect = windowWidth / windowHeight,
 				width = windowAspect < photo.aspect ? windowWidth : (windowHeight * photo.aspect),
-				height = width / photo.aspect,
-				url = photo.urlForWidth(windowWidth, 1.5),
-				marginTop = (windowHeight / 2) - (height / 2);
+				height = width / photo.aspect;
 
 			$scope.overlay = {
 				width: width,
 				height: height,
-				marginTop: marginTop,
-				url: url,
+				marginTop: (windowHeight / 2) - (height / 2),
+				url: photo.urlForWidth(windowWidth, 1.5),
+				smallUrl: photo.urlForHeight($scope.maxHeight),
 				showOptions: false
 			};
 
@@ -169,6 +169,13 @@ angular.module('flickrPortfolioSite')
 		$window.location.hash = '/' + $routeParams.albumUrl;
 	}).find('.imgContainer').on('click', function (e) {
 		e.stopPropagation();
+	});
+
+	$scope.$watch('selectedPhoto', function () {
+		if (!$scope.selectedPhoto) {
+			$('body').css('overflow', 'auto');
+			if ($scope.overlay) $scope.overlay.url = '';
+		}
 	});
 
 }]);

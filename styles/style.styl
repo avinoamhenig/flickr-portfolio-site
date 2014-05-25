@@ -150,40 +150,41 @@ header
 
 		.imgOptions
 			background black
-			border-radius 6px
 			position absolute
 			bottom 10px
 			right 10px
 			opacity 0
 			visibility hidden
-			transition-duration .3s
+			transition-duration 1s
 			transition-property opacity, visibility
-			padding 9px 9px 7px 8px
+			padding 11px 11px 9px 10px
 
 			&.show
+				transition-duration .3s
 				opacity .6
 				visibility visible
 
 			&:hover
-				opacity 1
+				opacity .8
 				visibility visible
 
 				.sizeOption
 					display inline
 
 				.cartImg
-					margin-left 20px
+					margin-left 38px
 
 			.price
 				display none
 				vertical-align top
 				line-height 23px
 				font-family Arial
-				width 40px
+				width 58px
 				text-align right
 
 			.sizeOption
-				padding-right 10px
+				padding-left 8px
+				padding-right 2px
 				vertical-align top
 				line-height 23px
 				font-family Arial

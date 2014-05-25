@@ -8,12 +8,13 @@ img.loader(src="img/load.gif", ng-class="{show: !laidOut}")
 		height="{{heightMap[$index]}}",
 		eol="{{eolIndexes.indexOf($index)}}",
 		ready="{{laidOut}}",
-		photo-id="{{photo.data.id}}"
+		photo-id="{{photo.data.id}}",
+		title="{{photo.data.title}}"
 	)
 
 .overlay(ng-class="{active: selectedPhoto}")
 	.imgContainer(style="width: {{overlay.width}}px; height: {{overlay.height}}px; margin-top: {{overlay.marginTop}}px;")
-		img.big(src="{{overlay.url}}", style="position: absolute;")
-		img.small(src="{{selectedPhoto.urlForHeight(maxHeight)}}")
+		img.big(src="{{overlay.url}}", style="position: absolute; opacity: {{overlay.url ? 1 : 0}}")
+		img.small(src="{{overlay.smallUrl}}")
 
-		div.imgOptions(ah-image-options, ng-class="{show: overlay.showOptions}")
+		div.imgOptions(ah-image-options, ng-class="{show: overlay.showOptions}", photo="selectedPhoto")
