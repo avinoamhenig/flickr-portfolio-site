@@ -86,33 +86,33 @@ angular.module('flickrPortfolioSite')
 				width = windowAspect < photo.aspect ? windowWidth : (windowHeight * photo.aspect),
 				height = width / photo.aspect, intialOptionsHideTimer;
 
-			$scope.overlay = {
-				width: width,
-				height: height,
-				marginTop: (windowHeight / 2) - (height / 2),
-				url: photo.urlForWidth(windowWidth, 1.5),
-				smallUrl: photo.urlForHeight($scope.maxHeight),
-				showOptions: false
-			};
+			$scope.overlay.width = width;
+			$scope.overlay.height = height;
+			$scope.overlay.marginTop = (windowHeight / 2) - (height / 2);
+			$scope.overlay.url = photo.urlForWidth(windowWidth, 1.5);
+			$scope.overlay.smallUrl = photo.urlForHeight($scope.maxHeight);
 
-			$scope.overlay.showOptions = true;
-			intialOptionsHideTimer = $timeout(function () {
-				$scope.overlay.showOptions = false;
-			}, 4000);
+			// intialOptionsHideTimer = $timeout(function () {
+				// $scope.overlay.showOptionsButton = false;
+			// }, 4000);
 
-			$($window).on('mousemove.showImgOptions', $.debounce(250, true, function () {
-				$timeout.cancel(intialOptionsHideTimer);
-				$scope.$apply(function () {
-					$scope.overlay.showOptions = true;
-				});
-			})).on('mousemove.showImgOptions', $.debounce(4000, false, function () {
-				$scope.$apply(function () {
-					$scope.overlay.showOptions = false;
-				});
-			}));
+			// $($window).on('mousemove.showImgOptions', $.debounce(250, true, function () {
+				// $timeout.cancel(intialOptionsHideTimer);
+				// $scope.$apply(function () {
+					// $scope.overlay.showOptionsButton = true;
+				// });
+			// })).on('mousemove.showImgOptions', $.debounce(4000, false, function () {
+				// $scope.$apply(function () {
+					// $scope.overlay.showOptionsButton = false;
+				// });
+			// }));
 		},
 
 		headerHeight = $('header').height();
+
+	$scope.maxHeight = 320;
+	$scope.overlay = {};
+	$scope.overlay.showOptionsButton = true;
 
 	positionLoader();
 	$('.gallery').height($($window).height() -  headerHeight);
@@ -123,8 +123,6 @@ angular.module('flickrPortfolioSite')
 			updateOverlay();
 		});
 	}));
-
-	$scope.maxHeight = 320;
 
 	angular.forEach($scope.$parent.sets, function (set) {
 		if (set.urlTitle === $routeParams.albumUrl) {
@@ -165,7 +163,10 @@ angular.module('flickrPortfolioSite')
 
 	$('.overlay').on('click', function () {
 		$window.location.hash = '/' + $routeParams.albumUrl;
+	}).find('.imgOptions').on('click', function (e) {
+		e.stopPropagation();
 	});
+
 	$(document).on('keydown', function (e) {
 		if (e.which === 27) {
 			$window.location.hash = '/' + $routeParams.albumUrl;
@@ -174,7 +175,10 @@ angular.module('flickrPortfolioSite')
 
 	$scope.$watch('selectedPhoto', function () {
 		if (!$scope.selectedPhoto) {
-			if ($scope.overlay) $scope.overlay.url = '';
+			if ($scope.overlay) {
+				$scope.overlay.url = '';
+				$scope.overlay.optionsActive = false;
+			}
 		}
 	});
 

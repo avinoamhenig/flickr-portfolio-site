@@ -36,6 +36,7 @@ module.exports = function (grunt) {
 						jshint('scripts/flickr'),
 						jshint('scripts/ah-sets'),
 						jshint('scripts/ah-photo'),
+						jshint('scripts/ah-paypal'),
 						jshint('scripts/ah-image-options'),
 						jshint('scripts/flickrPortfolioSite'),
 						jshint('scripts/galleryController'),

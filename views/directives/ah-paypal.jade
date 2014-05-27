@@ -1,0 +1,13 @@
+form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_blank")
+	input(type="hidden", name="business", value="{{user}}")
+	input(type="hidden", name="cmd", value="_xclick")
+
+	input(type="hidden", name="item_name", value="{{name}}")
+	input(type="hidden", name="amount", value="{{price}}")
+	input(type="hidden", name="currency_code", value="USD")
+	input(type="submit", name="submit", target='_blank', style="display: none;")
+
+	input(type="hidden", ng-repeat="option in options", name="on{{$index}}", value="{{option.key}}")
+	input(type="hidden", ng-repeat="option in options", name="os{{$index}}", value="{{option.val}}")
+
+	.buyBtn(ng-click="submit()") {{text}}

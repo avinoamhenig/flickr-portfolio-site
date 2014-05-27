@@ -2,6 +2,7 @@ angular.module('flickrPortfolioSite', [
 	'ahFlickr',
 	'ahSets',
 	'ahPhoto',
+	'ahPaypal',
 	'ahImageOptions',
 	'ahPromises',
 	'ngRoute'

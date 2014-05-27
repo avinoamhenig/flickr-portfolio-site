@@ -1,19 +1,9 @@
-form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_blank")
-	input(type="hidden", name="business", value="#{config.paypal.user}")
-	input(type="hidden", name="cmd", value="_xclick")
-
-	input(type="hidden", name="item_name", value="{{photo.data.title ? photo.data.title : 'Photo'}} - Print")
-	input(type="hidden", name="amount", value="{{price}}")
-	input(type="hidden", name="currency_code", value="USD")
-	input(type="submit", name="submit", target='_blank', style='display:none;')
-
-	input(type="hidden", name="on0", value="Size")
-	input(type="hidden", name="os0", value="{{size}}")
-	input(type="hidden", name="on1", value="Photo ID")
-	input(type="hidden", name="os1", value="{{photo.data.id}}")
-
-	//- each price, size in config.sizeOptions
-		//- span.sizeOption(data-price='#{price}') #{size}
-
-	img.cartImg(src="img/cart.png", alt="Add to cart", style="display: {{!showPrice ? 'inline' : 'none'}};")
-	//- span.price(style="display: {{showPrice ? 'inline-block' : 'none'}};") ${{price}}
+.imgOptionsBtn(ng-class="{showButton: showButton, closeBtn: active}", ng-click="active = !active") +
+.optionsOverlay(ng-class="{showOverlay: active}")
+	.paypal(ah-paypal,
+			user="user",
+			name="{{photo.data.title ? photo.data.title : 'Photo'}} - Print",
+			price="100",
+			text="Buy",
+			options="[{key: 'Size', val: '60x80'}, {key: 'Photo ID', val: photo.data.id}]"
+		)

@@ -2,8 +2,7 @@
 	img.loader(src="img/load.gif", ng-class="{show: !laidOut}")
 	.photos
 		.rightPad
-		span(
-			ah-photo,
+		span(ah-photo,
 			ng-repeat="photo in photos",
 			img="{{photo.urlForHeight(heightMap[$index], 1)}}",
 			img-height="{{heightMap[$index]}}",
@@ -17,4 +16,8 @@
 			img.big(src="{{overlay.url}}", style="position: absolute; opacity: {{overlay.url ? 1 : 0}};")
 			img.small(src="{{overlay.smallUrl}}")
 
-			.imgOptions(ah-image-options, ng-class="{show: overlay.showOptions}", photo="selectedPhoto")
+			.imgOptions(ah-image-options,
+				show-button="{{overlay.showOptionsButton}}",
+				active="overlay.optionsActive"
+				photo="selectedPhoto"
+			)
