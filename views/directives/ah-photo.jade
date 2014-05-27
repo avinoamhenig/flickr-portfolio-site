@@ -1,2 +1,4 @@
-img(src="{{img}}", height="{{height}}", loaded="{{loaded}}", ng-class="{ready: loaded && ready}")
-br(ng-show="eol > -1")
+img(src="{{img}}", height="{{imgHeight}}", loaded="{{loaded}}", ng-class="{ready: loaded && ready}", title="{{photo.data.title}}")
+br(ng-if="eol > -1")
+
+//- .imgOptions(ah-image-options, ng-class="{show: true}", photo="photo")

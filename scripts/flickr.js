@@ -132,7 +132,7 @@ angular.module('ahFlickr', []).provider('ahFlickr', function AHFlickrProvider() 
 					var bestFit;
 
 					if (maxUpscale === undefined) {
-						maxUpscale = 2;
+						maxUpscale = 1.5;
 					} else if (!maxUpscale) {
 						maxUpscale = 0;
 					}

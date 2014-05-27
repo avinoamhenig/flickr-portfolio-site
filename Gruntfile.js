@@ -137,7 +137,7 @@ module.exports = function (grunt) {
 				options: {
 					data: {
 						config: config,
-						styles: ['/styles/<%= reducedModifiedTimes.styl %>.style.min.css'],
+						styles: ['/styles/<%= reducedModifiedTimes.styl %>.style.css'],
 						scripts: ['/scripts/<%= reducedModifiedTimes.js %>.scripts.min.js'],
 						faviconUrl: '/' + getModifiedTime('favicon.ico') + '.favicon.ico'
 					}

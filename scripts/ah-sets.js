@@ -27,14 +27,16 @@ angular.module('ahSets', [
 				});
 			});
 
-			element.on('mousemove', $.throttle(5, function (e) {
+			$($window).on('mousemove', $.throttle(5, function (e) {
 				element.scrollLeft(
 					(elScrollWidth - elWidth) *
 					Math.min(
 						Math.max((e.pageX - elOffsetX - scrollPadding) / (elWidth - (scrollPadding * 3)), 0),
 						1)
 				);
-			})).on('click', 'img', function () {
+			}));
+
+			element.on('click', 'img', function () {
 				arrowSpeed = 200;
 			});
 

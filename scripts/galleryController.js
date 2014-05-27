@@ -3,32 +3,39 @@ angular.module('flickrPortfolioSite')
 .controller('GalleryController', ['$scope', '$routeParams', 'ahFlickr', '$window', '$route', '$timeout',
 	function ($scope, $routeParams, flickr, $window, $route, $timeout) {
 
-	var layout = function (mHeight) {
+	var layout = function () {
 			if (!$scope.photos) return;
-			if (typeof mHeight !== 'number') mHeight = $scope.maxHeight;
 
-			var photos = $scope.photos,
+			var mHeight = $scope.maxHeight,
+				photos = $scope.photos,
 				windowWidth = $($window).width(),
 				eolIndexes = [],
 				heightMap = (function () {
 					var map = [],
 						layoutRow = function (startIndex) {
 							var i = startIndex, j,
-								rowWidth = 6;
+								space = windowWidth - 10,
+								rowWidth = 0, verticalSpace, lastRowHeight;
 
-							do {
-								if (i === photos.length) break;
-
-								rowWidth += (mHeight * photos[i].aspect) + 10;
+							while (i < photos.length && rowWidth < space) {
+								rowWidth += (mHeight * photos[i].aspect);
+								space -= 10;
 								i++;
-							} while (rowWidth < windowWidth);
+							}
 
-							if (rowWidth < windowWidth) {
-								for (j = startIndex; j < i; j++)
-									map[j] = mHeight;
-							} else {
-								for (j = startIndex; j < i; j++)
-									map[j] = (mHeight / rowWidth) * windowWidth;
+							rowHeight = ((mHeight / rowWidth) * space);
+
+							if (rowWidth < space) {
+								if (eolIndexes.length) {
+									rowHeight = mHeight;
+								} else {
+									verticalSpace = $($window).height() - headerHeight - 30;
+									rowHeight = Math.min(verticalSpace, rowHeight);
+								}
+							}
+
+							for (j = startIndex; j < i; j++) {
+								map[j] = rowHeight;
 							}
 
 							if (i === photos.length) return;
@@ -40,21 +47,6 @@ angular.module('flickrPortfolioSite')
 					layoutRow(0);
 					return map;
 				})();
-
-			if ((!eolIndexes.length || eolIndexes.length === photos.length - 1) && mHeight == $scope.maxHeight) {
-				var rowAspect = 0;
-				$.each(photos, function (i, photo) {
-					rowAspect += photo.aspect;
-				});
-
-
-				return layout(
-					Math.min(
-						$($window).height() - 114,
-						Math.max(
-							($($window).height() - 114) / Math.max(1, photos.length - 0.25),
-							$($window).width() / rowAspect)));
-			}
 
 			$scope.heightMap = heightMap;
 			$scope.eolIndexes = eolIndexes;
@@ -92,7 +84,7 @@ angular.module('flickrPortfolioSite')
 				windowHeight = $($window).height(),
 				windowAspect = windowWidth / windowHeight,
 				width = windowAspect < photo.aspect ? windowWidth : (windowHeight * photo.aspect),
-				height = width / photo.aspect;
+				height = width / photo.aspect, intialOptionsHideTimer;
 
 			$scope.overlay = {
 				width: width,
@@ -103,24 +95,30 @@ angular.module('flickrPortfolioSite')
 				showOptions: false
 			};
 
-			$timeout(function () {
-				$('body').css('overflow', 'hidden');
-			}, 700);
+			$scope.overlay.showOptions = true;
+			intialOptionsHideTimer = $timeout(function () {
+				$scope.overlay.showOptions = false;
+			}, 4000);
 
 			$($window).on('mousemove.showImgOptions', $.debounce(250, true, function () {
+				$timeout.cancel(intialOptionsHideTimer);
 				$scope.$apply(function () {
 					$scope.overlay.showOptions = true;
 				});
-			})).on('mousemove.showImgOptions', $.debounce(3000, false, function () {
+			})).on('mousemove.showImgOptions', $.debounce(4000, false, function () {
 				$scope.$apply(function () {
 					$scope.overlay.showOptions = false;
 				});
 			}));
-		};
+		},
+
+		headerHeight = $('header').height();
 
 	positionLoader();
+	$('.gallery').height($($window).height() -  headerHeight);
 	$($window).on('resize.positions', $.throttle(250, function () {
 		positionLoader();
+		$('.gallery').height($($window).height() -  headerHeight);
 		$scope.$apply(function () {
 			updateOverlay();
 		});
@@ -167,13 +165,15 @@ angular.module('flickrPortfolioSite')
 
 	$('.overlay').on('click', function () {
 		$window.location.hash = '/' + $routeParams.albumUrl;
-	}).find('.imgContainer').on('click', function (e) {
-		e.stopPropagation();
+	});
+	$(document).on('keydown', function (e) {
+		if (e.which === 27) {
+			$window.location.hash = '/' + $routeParams.albumUrl;
+		}
 	});
 
 	$scope.$watch('selectedPhoto', function () {
 		if (!$scope.selectedPhoto) {
-			$('body').css('overflow', 'auto');
 			if ($scope.overlay) $scope.overlay.url = '';
 		}
 	});

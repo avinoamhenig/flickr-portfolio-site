@@ -12,8 +12,8 @@ form(action="https://www.paypal.com/cgi-bin/webscr", method="post", target="_bla
 	input(type="hidden", name="on1", value="Photo ID")
 	input(type="hidden", name="os1", value="{{photo.data.id}}")
 
-	each price, size in config.sizeOptions
-		span.sizeOption(data-price='#{price}') #{size}
+	//- each price, size in config.sizeOptions
+		//- span.sizeOption(data-price='#{price}') #{size}
 
 	img.cartImg(src="img/cart.png", alt="Add to cart", style="display: {{!showPrice ? 'inline' : 'none'}};")
-	span.price(style="display: {{showPrice ? 'inline-block' : 'none'}};") ${{price}}
+	//- span.price(style="display: {{showPrice ? 'inline-block' : 'none'}};") ${{price}}

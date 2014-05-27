@@ -1,20 +1,20 @@
-img.loader(src="img/load.gif", ng-class="{show: !laidOut}")
-.rightPad
-.photos
-	span(
-		ah-photo,
-		ng-repeat="photo in photos",
-		img="{{photo.urlForHeight(maxHeight)}}",
-		height="{{heightMap[$index]}}",
-		eol="{{eolIndexes.indexOf($index)}}",
-		ready="{{laidOut}}",
-		photo-id="{{photo.data.id}}",
-		title="{{photo.data.title}}"
-	)
+.gallery
+	img.loader(src="img/load.gif", ng-class="{show: !laidOut}")
+	.rightPad
+	.photos
+		span(
+			ah-photo,
+			ng-repeat="photo in photos",
+			img="{{photo.urlForHeight(heightMap[$index], 1)}}",
+			img-height="{{heightMap[$index]}}",
+			eol="{{eolIndexes.indexOf($index)}}",
+			ready="{{laidOut}}",
+			photo="photo"
+		)
 
-.overlay(ng-class="{active: selectedPhoto}")
-	.imgContainer(style="width: {{overlay.width}}px; height: {{overlay.height}}px; margin-top: {{overlay.marginTop}}px;")
-		img.big(src="{{overlay.url}}", style="position: absolute; opacity: {{overlay.url ? 1 : 0}}")
-		img.small(src="{{overlay.smallUrl}}")
+	.overlay(ng-class="{active: selectedPhoto}")
+		.imgContainer(style="width: {{overlay.width}}px; height: {{overlay.height}}px; margin-top: {{overlay.marginTop}}px;")
+			img.big(src="{{overlay.url}}", style="position: absolute; opacity: {{overlay.url ? 1 : 0}};")
+			img.small(src="{{overlay.smallUrl}}")
 
-		div.imgOptions(ah-image-options, ng-class="{show: overlay.showOptions}", photo="selectedPhoto")
+			.imgOptions(ah-image-options, ng-class="{show: overlay.showOptions}", photo="selectedPhoto")

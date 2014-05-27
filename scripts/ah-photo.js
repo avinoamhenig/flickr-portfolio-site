@@ -6,10 +6,10 @@ angular.module('ahPhoto', [])
 		templateUrl: 'directives/ah-photo',
 		scope: {
 			img: '@',
-			height: '@',
+			imgHeight: '@',
 			eol: '@',
 			ready: '@',
-			photoId: '@'
+			photo: '='
 		},
 		link: function (scope, element) {
 			element.find('img').on('load', function () {
@@ -17,7 +17,7 @@ angular.module('ahPhoto', [])
 					scope.loaded = true;
 				});
 			}).on('click', function () {
-				$window.location.hash += '/' + scope.photoId;
+				$window.location.hash += '/' + scope.photo.data.id;
 			});
 		}
 	};

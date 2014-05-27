@@ -11,7 +11,6 @@ html.no-js
 	//<![endif]
 
 	head
-		meta(charset="utf-8")
 		title #{config.title}
 
 		meta(name="description", content="#{config.desc}")
@@ -43,8 +42,8 @@ html.no-js
 			include partials/gallery
 
 		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
-		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.js")
-		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-route.js")
+		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js")
+		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular-route.min.js")
 
 		script.
 			window.config = !{JSON.stringify(config)};
