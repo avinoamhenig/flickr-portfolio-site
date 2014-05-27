@@ -15,9 +15,8 @@ photoPadding = photoSpacing / 2
 
 html body
 	background bodyColor
-	// overflow hidden
 
-header
+.header
 	background headerColor
 	overflow hidden
 
@@ -34,7 +33,7 @@ header
 
 	.nav
 		float left
-		padding 0 45px 0 40px
+		padding 0 40px 0 30px
 		border-bottom headerOutlineHeight solid headerOutlineColor
 		height headerHeight
 
@@ -47,12 +46,17 @@ header
 			opacity 0.6
 			transition opacity .3s
 			text-decoration none
-			padding ((headerHeight + (headerOutlineHeight / 2) - 24px) / 2) 0
+			padding ((headerHeight + (headerOutlineHeight / 2) - 24px) / 2) 15px
 
 			&:hover, &:focus
 				outline none
 				opacity 1
 				transition-duration .1s
+
+			&.selected
+				opacity 1
+				transition-duration .1s
+				border-bottom headerOutlineHeight solid headerSelectionColor
 
 	.sets
 		text-align right
@@ -99,7 +103,7 @@ header
 
 .gallery
 	overflow-y scroll
-	-webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling touch
 
 	.photos
 		padding photoPadding
@@ -137,11 +141,8 @@ header
 		right 0
 		bottom 0
 		background rgba(0, 0, 0, 0.9)
-		font-family sans-serif
-		font-size 18px
-		color white
 		transition-duration .3s
-		transition-property opacity, visibility
+		transition opacity, visibility
 
 		&.active
 			visibility visible
@@ -156,25 +157,26 @@ header
 				height 100%
 
 			.imgOptions
-				background rgba(0, 0, 0, 0.8)
+				background rgba(0, 0, 0, 0.4)
 				position absolute
 				bottom 10px
 				right 10px
 				opacity 0
 				visibility hidden
 				transition-duration 1s
-				transition-property opacity, visibility
-				padding 11px 11px 9px 10px
+				transition-property opacity, visibility, background-color
+				padding 11px 12px 9px 12px
 				cursor pointer
 
 				&.show
 					transition-duration .3s
-					opacity .5
+					opacity 1
 					visibility visible
 
 				&:hover
 					opacity 1
 					visibility visible
+					background rgba(0, 0, 0, 0.8)
 
 	.loader
 		visibility hidden
