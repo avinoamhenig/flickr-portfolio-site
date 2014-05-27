@@ -92,20 +92,21 @@ angular.module('flickrPortfolioSite')
 			$scope.overlay.url = photo.urlForWidth(windowWidth, 1.5);
 			$scope.overlay.smallUrl = photo.urlForHeight($scope.maxHeight);
 
-			// intialOptionsHideTimer = $timeout(function () {
-				// $scope.overlay.showOptionsButton = false;
-			// }, 4000);
+			intialOptionsHideTimer = $timeout(function () {
+				$scope.overlay.showOptionsButton = false;
+			}, 4000);
 
-			// $($window).on('mousemove.showImgOptions', $.debounce(250, true, function () {
-				// $timeout.cancel(intialOptionsHideTimer);
-				// $scope.$apply(function () {
-					// $scope.overlay.showOptionsButton = true;
-				// });
-			// })).on('mousemove.showImgOptions', $.debounce(4000, false, function () {
-				// $scope.$apply(function () {
-					// $scope.overlay.showOptionsButton = false;
-				// });
-			// }));
+			$($window).on('mousemove.showImgOptions', $.debounce(250, true, function () {
+				$timeout.cancel(intialOptionsHideTimer);
+				$scope.$apply(function () {
+					$scope.overlay.showOptionsButton = true;
+				});
+			})).on('mousemove.showImgOptions', $.debounce(4000, false, function () {
+				$scope.$apply(function () {
+					console.log('hi');
+					$scope.overlay.showOptionsButton = false;
+				});
+			}));
 		},
 
 		headerHeight = $('header').height();

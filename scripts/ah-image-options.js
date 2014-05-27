@@ -5,7 +5,7 @@ angular.module('ahImageOptions', [])
 		restrict: 'AE',
 		templateUrl: 'directives/ah-image-options',
 		scope: {
-			showButton: '@',
+			showButton: '=',
 			photo: '=',
 			active: '='
 		},
