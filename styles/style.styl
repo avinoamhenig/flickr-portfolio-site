@@ -23,20 +23,18 @@ header
 
 	.logo
 		float left
-		width 60px
 		font-size 62px
 		font-weight 100
-		padding 20px 25px 0 25px
+		padding 22px 5px 0 15px
 		color headerTextColor
 		font-family Sacramento, sans-serif
 		cursor default
-		height headerHeight - 20px
+		height headerHeight - 22px
 		border-bottom headerOutlineHeight solid headerOutlineColor
 
 	.nav
 		float left
-		padding-left 20px
-		width 105px
+		padding 0 45px 0 40px
 		border-bottom headerOutlineHeight solid headerOutlineColor
 		height headerHeight
 
@@ -49,21 +47,15 @@ header
 			opacity 0.6
 			transition opacity .3s
 			text-decoration none
-			margin-right 30px
-			margin-top -(headerOutlineHeight)
-			padding ((headerHeight - 12px) / 2) 0
+			padding ((headerHeight + (headerOutlineHeight / 2) - 24px) / 2) 0
 
-			&:hover
-				opacity 1
-				transition-duration .1s
-
-			&:focus
+			&:hover, &:focus
 				outline none
 				opacity 1
 				transition-duration .1s
+
 	.sets
 		text-align right
-		position relative
 		white-space nowrap
 		overflow hidden
 
@@ -74,10 +66,8 @@ header
 			height headerHeight
 
 		.setsInner
-			overflow visible
 			display inline-block
 			position relative
-			font-size 0
 			border-bottom headerOutlineHeight solid headerOutlineColor
 			height headerHeight
 
