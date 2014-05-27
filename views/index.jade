@@ -11,6 +11,8 @@ html.no-js
 	//<![endif]
 
 	head
+		meta(charset="utf-8")
+
 		title #{config.title}
 
 		meta(name="description", content="#{config.desc}")
@@ -25,9 +27,8 @@ html.no-js
 	body(ng-app="flickrPortfolioSite", ng-controller="SiteController")
 		header
 			.logo S
-			nav
+			.nav
 				a(href="#") About
-
 			.sets(ah-sets, sets="sets", selected-set="selectedSet")
 
 		div(ng-view)

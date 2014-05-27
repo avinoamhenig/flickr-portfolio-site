@@ -8,13 +8,13 @@ angular.module('flickrPortfolioSite')
 
 			var mHeight = $scope.maxHeight,
 				photos = $scope.photos,
-				windowWidth = $($window).width(),
+				viewportWidth = $('.photos').outerWidth(),
 				eolIndexes = [],
 				heightMap = (function () {
 					var map = [],
 						layoutRow = function (startIndex) {
 							var i = startIndex, j,
-								space = windowWidth - 10,
+								space = viewportWidth - 10,
 								rowWidth = 0, verticalSpace, lastRowHeight;
 
 							while (i < photos.length && rowWidth < space) {

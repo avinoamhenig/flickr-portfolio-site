@@ -15,43 +15,43 @@ photoPadding = photoSpacing / 2
 
 html body
 	background bodyColor
-	overflow hidden
+	// overflow hidden
 
 header
-	// position fixed
-	top 0
-	width 100%
-	height headerHeight
 	background headerColor
-	border-bottom headerOutlineHeight solid headerOutlineColor
-	white-space nowrap
+	overflow hidden
 
 	.logo
+		float left
+		width 60px
 		font-size 62px
 		font-weight 100
-		padding 0 25px
+		padding 20px 25px 0 25px
 		color headerTextColor
 		font-family Sacramento, sans-serif
 		cursor default
-		display block
-		position fixed
-		top headerHeight - 68px
+		height headerHeight - 20px
+		border-bottom headerOutlineHeight solid headerOutlineColor
 
-	nav
-		display inline-block
-		padding 0 0 0 130px
+	.nav
+		float left
+		padding-left 20px
+		width 105px
+		border-bottom headerOutlineHeight solid headerOutlineColor
+		height headerHeight
 
 		a
 			font-family Helvetica Neue, sans-serif
 			font-size 20px
 			font-weight 100
-			display inline-block
+			display block
 			color headerTextColor
 			opacity 0.6
 			transition opacity .3s
 			text-decoration none
 			margin-right 30px
-			padding ((headerHeight - 18px) / 2) 5px
+			margin-top -(headerOutlineHeight)
+			padding ((headerHeight - 12px) / 2) 0
 
 			&:hover
 				opacity 1
@@ -61,36 +61,51 @@ header
 				outline none
 				opacity 1
 				transition-duration .1s
-
 	.sets
-		display inline
-		position absolute
-		overflow hidden
-		right -(headerHeight) - 4
-		left 230px
-		height headerHeight + headerSelectionHeight
 		text-align right
+		position relative
+		white-space nowrap
+		overflow hidden
 
-		img
+		.borderFill
+			position absolute
+			width 100%
+			border-bottom headerOutlineHeight solid headerOutlineColor
 			height headerHeight
-			opacity 0.5
-			cursor pointer
-			transition opacity .3s
 
-			&.selected
-				opacity 1
-
-			&:hover
-				opacity 1
-				transition-duration .1s
-
-		.arrow
-			display none
-			width headerHeight
-			height headerSelectionHeight
-			background headerSelectionColor
+		.setsInner
+			overflow visible
+			display inline-block
 			position relative
-			top 8px
+			font-size 0
+			border-bottom headerOutlineHeight solid headerOutlineColor
+			height headerHeight
+
+			img
+				height headerHeight
+				widht headerHeight
+				opacity 0.5
+				cursor pointer
+				transition opacity .3s
+
+				&.selected
+					opacity 1
+
+				&:hover
+					opacity 1
+					transition-duration .1s
+
+			.arrow
+				display none
+				width headerHeight
+				height headerSelectionHeight
+				background headerSelectionColor
+				position absolute
+				border none
+				top headerHeight
+
+				&.animate
+					transition right .2s
 
 .gallery
 	overflow-y scroll
@@ -101,6 +116,7 @@ header
 		line-height 0
 		overflow hidden
 		white-space nowrap
+		position relative
 
 		span
 			font-size 0
@@ -114,13 +130,13 @@ header
 					opacity 1
 					transition opacity .3s
 
-	.rightPad
-		width photoSpacing
-		height 100%
-		position fixed
-		right 0
-		top headerHeight + headerOutlineHeight
-		background bodyColor
+		.rightPad
+			width photoSpacing
+			height 100%
+			position absolute
+			right 0
+			top 0
+			background bodyColor
 
 	.overlay
 		visibility hidden
