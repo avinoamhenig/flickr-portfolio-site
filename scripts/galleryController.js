@@ -109,7 +109,7 @@ angular.module('flickrPortfolioSite')
 			}));
 		},
 
-		headerHeight = $('header').height();
+		headerHeight = $('.header').height();
 
 	$scope.maxHeight = 320;
 	$scope.overlay = {};
