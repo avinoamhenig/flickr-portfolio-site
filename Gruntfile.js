@@ -31,20 +31,23 @@ module.exports = function (grunt) {
 					js: [
 						'bower_components/jquery-throttle-debounce/jquery.ba-throttle-debounce',
 
-						jshint('scripts/whenpageis'),
-						jshint('scripts/ahPromises'),
-						jshint('scripts/flickr'),
-						jshint('scripts/ah-sets'),
-						jshint('scripts/ah-photo'),
-						jshint('scripts/ah-paypal'),
-						jshint('scripts/ah-image-options'),
-						jshint('scripts/flickrPortfolioSite'),
-						jshint('scripts/galleryController'),
+						'app/scripts/google_analytics',
 
-						'scripts/google_analytics'
+						jshint('app/scripts/whenpageis'),
+						jshint('app/scripts/ahPromises'),
+						jshint('app/scripts/ahFlickr'),
+
+						jshint('app/directives/ah-sets/ahSets'),
+						jshint('app/directives/ah-photo/ahPhoto'),
+						jshint('app/directives/ah-paypal/ahPaypal'),
+						jshint('app/directives/ah-image-options/ahImageOptions'),
+
+						jshint('app/app'),
+
+						jshint('app/routes/gallery/GalleryController')
 					],
-					styl: ['styles/style'],
-					jade: ['views/index']
+					styl: ['app/styles/style'],
+					jade: ['app/index']
 				},
 
 				jshint: toJsHint
@@ -61,8 +64,6 @@ module.exports = function (grunt) {
 		}, {});
 
 	grunt.initConfig({
-		pkg: grunt.file.readJSON('package.json'),
-
 		reducedModifiedTimes: Object.keys(modifiedTimes).reduce(function (obj, key) {
 			obj[key] = Math.max.apply(Math, Object.keys(modifiedTimes[key]).map(function (path) {
 				return modifiedTimes[key][path];
@@ -118,7 +119,7 @@ module.exports = function (grunt) {
 			build: {
 				options: {
 					import: ['nib'],
-					paths: ['styles'],
+					paths: ['app'],
 					compress: true
 				},
 				files: spec.files.styl.reduce(function (obj, name) {
@@ -136,6 +137,7 @@ module.exports = function (grunt) {
 					return r;
 				})),
 				options: {
+					basedir: 'app',
 					data: {
 						config: config,
 						styles: ['/styles/<%= reducedModifiedTimes.styl %>.style.css'],
@@ -152,6 +154,7 @@ module.exports = function (grunt) {
 				})),
 				options: {
 					pretty: true,
+					basedir: 'app',
 					data: {
 						config: config,
 						styles: spec.files.styl.map(function (name) {
@@ -167,7 +170,7 @@ module.exports = function (grunt) {
 		},
 
 		watch: {
-			files: ['scripts/**', 'styles/**', 'views/**'],
+			files: ['app/**'],
 			tasks: ['clean', 'jshint', 'copy', 'stylus', 'jade:dev']
 		}
 	});

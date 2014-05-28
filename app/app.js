@@ -13,7 +13,7 @@ angular.module('flickrPortfolioSite', [
 
 	$routeProvider
 		.when('/:albumUrl/:photoId?', {
-			templateUrl: 'partials/gallery',
+			templateUrl: 'views/gallery',
 			controller: 'GalleryController',
 			resolve: {
 				sets: promisesProvider.resolve('sets')
@@ -21,7 +21,9 @@ angular.module('flickrPortfolioSite', [
 		});
 }])
 
-.controller('SiteController', ['$scope', 'ahFlickr', 'ahPromises', '$routeParams', '$window', function ($scope, flickr, promises, $routeParams, $window) {
+.controller('AppController', ['$scope', 'ahFlickr', 'ahPromises', '$routeParams', '$window',
+	function ($scope, flickr, promises, $routeParams, $window) {
+
 	$scope.$on('$routeChangeSuccess', function () {
 		$scope.selectedSet = $routeParams.albumUrl;
 	});
@@ -35,4 +37,5 @@ angular.module('flickrPortfolioSite', [
 
 		promises.deffered('sets').resolve();
 	});
+
 }]);

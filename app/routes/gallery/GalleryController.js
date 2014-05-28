@@ -103,7 +103,6 @@ angular.module('flickrPortfolioSite')
 				});
 			})).on('mousemove.showImgOptions', $.debounce(4000, false, function () {
 				$scope.$apply(function () {
-					console.log('hi');
 					$scope.overlay.showOptionsButton = false;
 				});
 			}));

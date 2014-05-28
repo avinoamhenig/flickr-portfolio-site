@@ -216,13 +216,12 @@ html body
 						left 25px
 						padding 15px 28px
 						cursor pointer
-						background linear-gradient(headerSelectionColor 0%, darken(headerSelectionColor, 30%) 100%)
-						opacity .8
+						background rgba(headerSelectionColor, 0.5)
 						border-radius 2px
-						transition opacity .3s
+						transition background-color .3s
 
 						&:hover
-							opacity 1
+							background rgba(headerSelectionColor, 0.7)
 
 	.loader
 		visibility hidden

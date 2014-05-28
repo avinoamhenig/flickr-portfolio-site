@@ -24,7 +24,7 @@ html.no-js
 		link(rel="stylesheet", href="http://fonts.googleapis.com/css?family=Sacramento")
 		link(rel="shortcut icon", href="#{faviconUrl}")
 
-	body(ng-app="flickrPortfolioSite", ng-controller="SiteController")
+	body(ng-app="flickrPortfolioSite", ng-controller="AppController")
 		.header
 			.logo S
 			.nav
@@ -34,15 +34,16 @@ html.no-js
 		div(ng-view)
 
 		script(type="text/ng-template", id="directives/ah-sets")
-			include directives/ah-sets
+			include /directives/ah-sets/ah-sets
 		script(type="text/ng-template", id="directives/ah-photo")
-			include directives/ah-photo
+			include /directives/ah-photo/ah-photo
 		script(type="text/ng-template", id="directives/ah-paypal")
-			include directives/ah-paypal
+			include /directives/ah-paypal/ah-paypal
 		script(type="text/ng-template", id="directives/ah-image-options")
-			include directives/ah-image-options
-		script(type="text/ng-template", id="partials/gallery")
-			include partials/gallery
+			include /directives/ah-image-options/ah-image-options
+
+		script(type="text/ng-template", id="views/gallery")
+			include /routes/gallery/gallery
 
 		script(src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js")
 		script(src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.15/angular.min.js")
