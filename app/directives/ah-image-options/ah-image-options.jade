@@ -1,9 +1,26 @@
 .imgOptionsBtn(ng-class="{showButton: showButton, closeBtn: active}", ng-click="active = !active") +
+
 .optionsOverlay(ng-class="{showOverlay: active}")
-	.paypal(ah-paypal,
-			user="user",
-			name="{{photo.data.title ? photo.data.title : 'Photo'}} - Print",
-			price="100",
-			text="Buy",
-			options="[{key: 'Size', val: '60x80'}, {key: 'Photo ID', val: photo.data.id}]"
-		)
+
+	.buyModule
+		.sizesDrop
+			.triangle
+			.sizeVal
+				span.size
+					{{selectedSize.size}}
+				span.price
+					${{selectedSize.price}}
+			.sizeOptions
+				.sizeOption(ng-repeat="size in sizes", ng-click="selectSize(size)")
+					span.size
+						{{size.size}}
+					span.price
+						${{size.price}}
+
+		.paypal(ah-paypal,
+				user="user",
+				name="{{photo.data.title ? photo.data.title : 'Photo'}} - Print",
+				price="{{selectedSize.price}}",
+				text="Buy",
+				options="[{key: 'Size', val: selectedSize.size}, {key: 'Photo ID', val: photo.data.id}]"
+			)
