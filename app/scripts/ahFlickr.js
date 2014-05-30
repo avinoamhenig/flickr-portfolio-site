@@ -19,7 +19,7 @@ angular.module('ahFlickr', []).provider('ahFlickr', function AHFlickrProvider() 
 
 			// Makes a request to the flickr api. Returns a promise.
 			request = function (method, data) {
-				return $http.jsonp('http://api.flickr.com/services/rest/', {
+				return $http.jsonp('https://api.flickr.com/services/rest/', {
 					params: angular.extend(data, {
 						method: method,
 						format: 'json',
@@ -68,7 +68,7 @@ angular.module('ahFlickr', []).provider('ahFlickr', function AHFlickrProvider() 
 				// Technically accepts other size identifiers, but I recommend against using them.
 				// Get the photo and photo sizes to show larger images.
 				this.url = function (size) {
-					return 'http://farm' + this.data.farm + '.staticflickr.com/' +
+					return 'https://farm' + this.data.farm + '.staticflickr.com/' +
 						this.data.server + '/' + this.data.primary + '_' + this.data.secret + '_' + size + '.jpg';
 				};
 
