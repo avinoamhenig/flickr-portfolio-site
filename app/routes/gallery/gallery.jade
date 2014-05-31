@@ -12,8 +12,8 @@
 		)
 
 	.overlay(ng-class="{active: selectedPhoto}")
-		.imgContainer(style="width: {{overlay.width}}px; height: {{overlay.height}}px; margin-top: {{overlay.marginTop}}px;")
-			img.big(src="{{overlay.url}}", style="position: absolute; opacity: {{overlay.url ? 1 : 0}};")
+		.imgContainer(ng-style="{'width': overlay.width + 'px', 'margin-top': overlay.marginTop + 'px'}")
+			img.big(src="{{overlay.url}}", ng-style="{'position': 'absolute', 'opacity': overlay.url ? 1 : 0}")
 			img.small(src="{{overlay.smallUrl}}")
 
 			.imgOptions(ah-image-options,

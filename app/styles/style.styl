@@ -13,9 +13,9 @@ headerSelectionHeight = headerOutlineHeight
 photoSpacing = 10px
 photoPadding = photoSpacing / 2
 
-html body
+html, body
 	background bodyColor
-	overflow hidden
+	// overflow hidden
 
 .header
 	background headerColor
@@ -63,6 +63,7 @@ html body
 		text-align right
 		white-space nowrap
 		overflow hidden
+		position relative
 
 		.borderFill
 			position absolute
@@ -165,10 +166,11 @@ html body
 
 				.imgOptionsBtn
 					z-index 9999
-					font-weight 200
+					font-weight 100
 					font-family sans-serif
 					font-size 30px
-					padding 5px 12px 9px 12px
+					height 44px
+					width 44px
 					background rgba(0, 0, 0, 0.4)
 					position absolute
 					bottom 10px
@@ -179,6 +181,11 @@ html body
 					transition-duration 1s
 					transition-property opacity, visibility, background-color, transform, background-color
 					cursor pointer
+
+					span
+						position absolute
+						top 4px
+						left 12px
 
 					&.showButton, &:hover, &.closeBtn
 						transition-duration .3s
