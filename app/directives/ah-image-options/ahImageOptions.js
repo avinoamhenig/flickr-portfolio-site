@@ -27,7 +27,7 @@ angular.module('ahImageOptions', [])
 				$sizeOptions.removeClass('active');
 			};
 
-			$sizesDrop.on('mouseover', function () {
+			$sizesDrop.find('.sizeVal').on('mouseenter', function () {
 				$sizeOptions.addClass('active');
 			});
 		}
