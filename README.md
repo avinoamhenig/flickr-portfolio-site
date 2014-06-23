@@ -10,6 +10,8 @@ Copy `config.json.sample` and name it `config.json`. This is the config file. Po
 
 The web server's document root should point to the `build/` directory within the project.
 
+Run `npm install` and `bower install`.
+
 ### Build
 
 The build script compiles and processes all the files and places the result in the `build` directory. It relies on Node JS and Grunt.
